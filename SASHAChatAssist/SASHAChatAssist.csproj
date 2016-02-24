@@ -92,6 +92,8 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
       <Private>True</Private>
@@ -139,17 +141,64 @@
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="tsc_tools.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>tsc_tools.edmx</DependentUpon>
+      <LastGenOutput>tsc_tools.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="tsc_tools.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>tsc_tools.edmx</DependentUpon>
+      <LastGenOutput>tsc_tools.cs</LastGenOutput>
+    </Content>
     <Content Include="Web.config" />
+    <EntityDeploy Include="tsc_tools.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>tsc_tools.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="tsc_tools.edmx.diagram">
+      <DependentUpon>tsc_tools.edmx</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chatHelper.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
+    <Compile Include="chatSession.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database.cs" />
     <Compile Include="MyHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sashaSession.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="tsc_tools.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>tsc_tools.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tsc_tools.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tsc_tools.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>tsc_tools.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="user.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sasha\css\" />
     <Folder Include="sasha\js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

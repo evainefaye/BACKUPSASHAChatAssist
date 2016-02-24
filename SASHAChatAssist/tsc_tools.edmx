@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="chatHelpers">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="onlineStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="connectionStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastChatTime" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="currentChats" Type="int" Nullable="false" />
+          <Property Name="maximumChats" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="chatSessions">
+          <Key>
+            <PropertyRef Name="sashaSessionId" />
+          </Key>
+          <Property Name="sashaSessionId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="agentConnectionId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="helperConnectionId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="agentId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="helperId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastActivity" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="requestDate" Type="nvarchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sashaSessions">
+          <Key>
+            <PropertyRef Name="connectionId" />
+          </Key>
+          <Property Name="connectionId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="sessionStartTime" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="smpSessionId" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="milestone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="userName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_chatHelpers_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="chatHelpers" Type="Self.chatHelpers" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="chatHelpers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_chatSessions_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="chatSessions" Type="Self.chatSessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="chatSessions">
+              <PropertyRef Name="agentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_chatSessions_users1">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="chatSessions" Type="Self.chatSessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="chatSessions">
+              <PropertyRef Name="helperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sashaSessions_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="sashaSessions" Type="Self.sashaSessions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="sashaSessions">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_89250_signalrchatModelStoreContainer">
+          <EntitySet Name="chatHelpers" EntityType="Self.chatHelpers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="chatSessions" EntityType="Self.chatSessions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sashaSessions" EntityType="Self.sashaSessions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_chatHelpers_users" Association="Self.FK_chatHelpers_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="chatHelpers" EntitySet="chatHelpers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_chatSessions_users" Association="Self.FK_chatSessions_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="chatSessions" EntitySet="chatSessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_chatSessions_users1" Association="Self.FK_chatSessions_users1">
+            <End Role="users" EntitySet="users" />
+            <End Role="chatSessions" EntitySet="chatSessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sashaSessions_users" Association="Self.FK_sashaSessions_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="sashaSessions" EntitySet="sashaSessions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB_89250_signalrchatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="chatHelper">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="onlineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="connectionStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lastChatTime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="currentChats" Type="Int32" Nullable="false" />
+          <Property Name="maximumChats" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK_chatHelpers_users" FromRole="chatHelpers" ToRole="users" />
+        </EntityType>
+        <EntityType Name="chatSession">
+          <Key>
+            <PropertyRef Name="sashaSessionId" />
+          </Key>
+          <Property Name="sashaSessionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="agentConnectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="helperConnectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="agentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="helperId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lastActivity" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="requestDate" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK_chatSessions_users" FromRole="chatSessions" ToRole="users" />
+          <NavigationProperty Name="user1" Relationship="Self.FK_chatSessions_users1" FromRole="chatSessions" ToRole="users" />
+        </EntityType>
+        <EntityType Name="sashaSession">
+          <Key>
+            <PropertyRef Name="connectionId" />
+          </Key>
+          <Property Name="connectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sessionStartTime" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="smpSessionId" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="milestone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="Self.FK_sashaSessions_users" FromRole="sashaSessions" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="chatHelper" Relationship="Self.FK_chatHelpers_users" FromRole="users" ToRole="chatHelpers" />
+          <NavigationProperty Name="chatSessions" Relationship="Self.FK_chatSessions_users" FromRole="users" ToRole="chatSessions" />
+          <NavigationProperty Name="chatSessions1" Relationship="Self.FK_chatSessions_users1" FromRole="users" ToRole="chatSessions" />
+          <NavigationProperty Name="sashaSessions" Relationship="Self.FK_sashaSessions_users" FromRole="users" ToRole="sashaSessions" />
+        </EntityType>
+        <Association Name="FK_chatHelpers_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="chatHelpers" Type="Self.chatHelper" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="chatHelpers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_chatSessions_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="chatSessions" Type="Self.chatSession" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="chatSessions">
+              <PropertyRef Name="agentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_chatSessions_users1">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="chatSessions" Type="Self.chatSession" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="chatSessions">
+              <PropertyRef Name="helperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sashaSessions_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="sashaSessions" Type="Self.sashaSession" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="sashaSessions">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="tsc_tools" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="chatHelpers" EntityType="Self.chatHelper" />
+          <EntitySet Name="chatSessions" EntityType="Self.chatSession" />
+          <EntitySet Name="sashaSessions" EntityType="Self.sashaSession" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK_chatHelpers_users" Association="Self.FK_chatHelpers_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="chatHelpers" EntitySet="chatHelpers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_chatSessions_users" Association="Self.FK_chatSessions_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="chatSessions" EntitySet="chatSessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_chatSessions_users1" Association="Self.FK_chatSessions_users1">
+            <End Role="users" EntitySet="users" />
+            <End Role="chatSessions" EntitySet="chatSessions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sashaSessions_users" Association="Self.FK_sashaSessions_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="sashaSessions" EntitySet="sashaSessions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DB_89250_signalrchatModelStoreContainer" CdmEntityContainer="tsc_tools">
+          <EntitySetMapping Name="chatHelpers">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatHelper">
+              <MappingFragment StoreEntitySet="chatHelpers">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="onlineStatus" ColumnName="onlineStatus" />
+                <ScalarProperty Name="connectionStatus" ColumnName="connectionStatus" />
+                <ScalarProperty Name="lastChatTime" ColumnName="lastChatTime" />
+                <ScalarProperty Name="currentChats" ColumnName="currentChats" />
+                <ScalarProperty Name="maximumChats" ColumnName="maximumChats" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chatSessions">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatSession">
+              <MappingFragment StoreEntitySet="chatSessions">
+                <ScalarProperty Name="sashaSessionId" ColumnName="sashaSessionId" />
+                <ScalarProperty Name="agentConnectionId" ColumnName="agentConnectionId" />
+                <ScalarProperty Name="helperConnectionId" ColumnName="helperConnectionId" />
+                <ScalarProperty Name="agentId" ColumnName="agentId" />
+                <ScalarProperty Name="helperId" ColumnName="helperId" />
+                <ScalarProperty Name="lastActivity" ColumnName="lastActivity" />
+                <ScalarProperty Name="requestDate" ColumnName="requestDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sashaSessions">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.sashaSession">
+              <MappingFragment StoreEntitySet="sashaSessions">
+                <ScalarProperty Name="connectionId" ColumnName="connectionId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="sessionStartTime" ColumnName="sessionStartTime" />
+                <ScalarProperty Name="smpSessionId" ColumnName="smpSessionId" />
+                <ScalarProperty Name="milestone" ColumnName="milestone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -18,9 +18,13 @@ namespace SASHAChatAssist
             app.UseCors(CorsOptions.AllowAll);
             app.MapSignalR(hubConfiguration);
 
-            // Clear Database tables at Startup [sashaSessions] 
-            // Database.ClearSashaSessions();
+            /* Set the following tables to an initialized state at startup
 
+                sashaSessions (empty)
+                chatSessions (empty)
+                chatHelpers (connectionStatus to notConnected)
+            */
+            Database.InitializeTables(); 
         }
     }
 }
