@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Web;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using Microsoft.AspNet.SignalR;
 
 namespace SASHAChatAssist
 {
@@ -11,7 +13,10 @@ namespace SASHAChatAssist
         /* Sets Database tables to an initialized state on application startup
             Empties records from table sashaSessionRecords
             Empties records from table chatSessionRecords
-            sets connectionStatus to "notConnected" for any records in chatHelpers
+            ChatHelpers
+                connectionStatus "notConnected"
+                currentChats 0
+                lastChatTime CurrentTime
         */
         public static void InitializeTables()
         {
@@ -27,9 +32,63 @@ namespace SASHAChatAssist
                 db.SaveChanges();
                 foreach (var chatHelperRecord in db.chatHelpers.ToList())
                 {
-                    chatHelperRecord.connectionStatus = "notConnected";
+                    chatHelperRecord.connectionId = "";
+                    chatHelperRecord.currentChats = 0;
+                    chatHelperRecord.lastChatTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                }
+                db.SaveChanges();
+            }
+        }
+
+        /* Takes the input of userId and searches in the database table [users] This function will retrieve the userName from the database table [users] */
+        public static string GetUserName(string userId)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                user user = new user();
+                var userRecord = db.users.Where(u => u.userId == userId.ToLower()).SingleOrDefault();
+                if (userRecord != null)
+                {
+                    return userRecord.userName.ToUpper();
+                }
+                else
+                {
+                    return null;
                 }
             }
         }
+
+        /* Checks helperConnection for an existing record and connectionStatus.
+           If no record exists return noRecord
+           If a record exists check if connectionStatus is notConnected
+                True: Update ConnectionStatus and return newConnection
+                False: return existingConnection */
+        public static string GetChatHelper(string userId, string connectionId)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                chatHelper chatHelper = new chatHelper();
+                var chatHelperRecord = db.chatHelpers.Where(c => c.userId == userId).SingleOrDefault();
+                if (chatHelperRecord != null)
+                {
+                    if (chatHelperRecord.connectionId != "")
+                    {
+                        return "existingConnection";
+                    }
+                    else
+                    {
+                        chatHelperRecord.connectionId = connectionId;
+                        db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
+                        db.SaveChanges();
+                        return "newConnection";
+                    }
+                }
+                else
+                {
+                    return "noRecord";
+                }
+            }
+        }
+
     }
 }

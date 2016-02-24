@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="chatHelpers">
           <Key>
             <PropertyRef Name="userId" />
           </Key>
           <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="onlineStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="connectionStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="connectionId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="lastChatTime" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="currentChats" Type="int" Nullable="false" />
           <Property Name="maximumChats" Type="int" Nullable="false" />
@@ -115,8 +115,7 @@
             <End Role="sashaSessions" EntitySet="sashaSessions" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_89250_signalrchatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -126,7 +125,7 @@
           </Key>
           <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="onlineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="connectionStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="connectionId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="lastChatTime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="currentChats" Type="Int32" Nullable="false" />
           <Property Name="maximumChats" Type="Int32" Nullable="false" />
@@ -247,9 +246,9 @@
           <EntitySetMapping Name="chatHelpers">
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatHelper">
               <MappingFragment StoreEntitySet="chatHelpers">
+                <ScalarProperty Name="connectionId" ColumnName="connectionId" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="onlineStatus" ColumnName="onlineStatus" />
-                <ScalarProperty Name="connectionStatus" ColumnName="connectionStatus" />
                 <ScalarProperty Name="lastChatTime" ColumnName="lastChatTime" />
                 <ScalarProperty Name="currentChats" ColumnName="currentChats" />
                 <ScalarProperty Name="maximumChats" ColumnName="maximumChats" />
