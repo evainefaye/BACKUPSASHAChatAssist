@@ -1,7 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.Owin.Cors;
 using Microsoft.Owin;
 using Owin;
+using Microsoft.AspNet.SignalR;
+using System.Data.Entity;
+
 
 [assembly: OwinStartup(typeof(SASHAChatAssist.Startup))]
 
@@ -11,7 +13,14 @@ namespace SASHAChatAssist
     {
         public void Configuration(IAppBuilder app)
         {
-            // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
+            HubConfiguration hubConfiguration = new HubConfiguration();
+            hubConfiguration.EnableDetailedErrors = true;
+            app.UseCors(CorsOptions.AllowAll);
+            app.MapSignalR(hubConfiguration);
+
+            // Clear Database tables at Startup [sashaSessions] 
+            // Database.ClearSashaSessions();
+
         }
     }
 }

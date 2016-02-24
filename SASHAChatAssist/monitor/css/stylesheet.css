@@ -1,0 +1,169 @@
+﻿.CSSTableGenerator {
+	margin:0px;padding:0px;
+	width:100%;
+	box-shadow: 10px 10px 5px #888888;
+	border:1px solid #000000;	
+	-moz-border-radius-bottomleft:0px;
+	-webkit-border-bottom-left-radius:0px;
+	border-bottom-left-radius:0px;
+	-moz-border-radius-bottomright:0px;
+	-webkit-border-bottom-right-radius:0px;
+	border-bottom-right-radius:0px;
+	-moz-border-radius-topright:0px;
+	-webkit-border-top-right-radius:0px;
+	border-top-right-radius:0px;
+	-moz-border-radius-topleft:0px;
+	-webkit-border-top-left-radius:0px;
+	border-top-left-radius:0px;
+}
+.CSSTableGenerator table {
+	border-spacing: 0;
+	width:100%;
+	height:100%;
+	margin:0px;
+    padding:0px;
+}
+.CSSTableGenerator tr:last-child td:last-child {
+	-moz-border-radius-bottomright:0px;
+	-webkit-border-bottom-right-radius:0px;
+	border-bottom-right-radius:0px;
+}
+.CSSTableGenerator table tr:first-child td:first-child {
+	-moz-border-radius-topleft:0px;
+	-webkit-border-top-left-radius:0px;
+	border-top-left-radius:0px;
+}
+.CSSTableGenerator table tr:first-child td:last-child {
+	-moz-border-radius-topright:0px;
+	-webkit-border-top-right-radius:0px;
+	border-top-right-radius:0px;
+}
+.CSSTableGenerator tr:last-child td:first-child {
+	-moz-border-radius-bottomleft:0px;
+	-webkit-border-bottom-left-radius:0px;
+	border-bottom-left-radius:0px;
+}
+.CSSTableGenerator tr:nth-child(odd) {
+	background-color:#aad4ff;
+}
+.CSSTableGenerator tr:nth-child(even)    {
+	background-color:#ffffff;
+}
+.CSSTableGenerator td {
+	vertical-align:middle;	
+	border:1px solid #000000;
+	border-width:0px 1px 1px 0px;
+	padding:7px;
+	font-size:10px;
+	font-family:Arial;
+	font-weight:normal;
+	color:#000000;
+}
+.CSSTableGenerator tr:last-child td {
+	border-width:0px 1px 0px 0px;
+}
+.CSSTableGenerator tr td:last-child {
+	border-width:0px 0px 1px 0px;
+}
+.CSSTableGenerator tr:last-child td:last-child {
+	border-width:0px 0px 0px 0px;
+}
+.CSSTableGenerator thead tr:first-child td {
+	background-color:#005fbf;
+	border:0px solid #000000;
+	text-align:center;
+	border-width:0px 0px 1px 1px;
+	font-size:14px;
+	font-family:Arial;
+	font-weight:bold;
+	color:#ffffff;
+}
+.CSSTableGenerator thead tr:first-child td:first-child {
+	border-width:0px 0px 1px 0px;
+}
+.CSSTableGenerator thead tr:first-child td:last-child{
+	border-width:0px 0px 1px 1px;
+}
+.CSSTableGenerator tr.selectedRow {
+	background-color: orange;
+}
+.CSSTableGenerator td.hidden {
+	text-align: center;
+	display: none;
+}
+
+.container {
+	background-color: #99CCFF;
+	border: thick solid #808080;
+	padding-top: 5px;
+	padding-right: 5px;
+	margin-top: 20px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 200px;
+	max-height: 200px;
+}
+
+.container-wrapper {
+	display: inline-block;
+	width:45%
+}
+
+input#message {
+	padding-left: 10px;
+	padding-right: 10px;
+	border: solid 3px black;
+    box-sizing: border-box;
+	width: 100%;
+}
+
+div.table-wrapper {
+	margin: auto;
+	width: 500px;
+	max-height: 300px;
+	overflow: auto;
+}
+
+textarea#fields {
+	display:inline-block;vertical-align:middle;
+}
+
+label#fields {
+	display: inline-block;
+	vertical-align: central;
+	font-weight: bolder;				
+}
+
+span#errorText {
+	color: red;
+	font-weight: bold;
+}
+
+input#sendmessage {
+	display: none;
+}
+
+.center {
+    text-align: center;
+}
+
+.sessionDuration {
+	text-align: right;
+}
+
+.stepName {
+	text-align: right;
+}
+
+.stepDuration {
+	text-align: right;
+}
+
+div#SashaSessions {
+	width: 90%;
+}
+
+.attention {
+	color: red;
+	font-weight: bold;
+}

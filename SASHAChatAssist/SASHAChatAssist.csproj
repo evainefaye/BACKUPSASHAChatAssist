@@ -124,7 +124,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="monitor\css\countdown.stylesheet.css" />
+    <Content Include="monitor\css\stylesheet.css" />
+    <Content Include="monitor\js\jquery.javascript.js" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
+    <Content Include="index.html" />
+    <Content Include="monitor\js\jquery.countdown.js" />
+    <Content Include="monitor\js\jquery.plugin.min.js" />
+    <Content Include="monitor\index.html" />
+    <Content Include="monitor\js\jquery-2.2.0.min.js" />
+    <Content Include="monitor\js\jquery.signalR-2.2.0.min.js" />
+    <Content Include="sasha\index.html" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
@@ -132,13 +142,12 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="MyHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="monitor\css\" />
-    <Folder Include="monitor\js\" />
     <Folder Include="sasha\css\" />
     <Folder Include="sasha\js\" />
   </ItemGroup>
