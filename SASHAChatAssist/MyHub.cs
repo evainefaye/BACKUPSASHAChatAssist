@@ -14,6 +14,28 @@ namespace SASHAChatAssist
 
     public class MyHub : Hub
     {
+        /* ***** GENERIC METHODS ***** */
+
+        /* Send a message to the browser console */
+        public void Debug(string message)
+        {
+            Clients.Caller.debug(message);
+        }
+
+        /* Update chat with chat messages */
+        public void BroadcastMessage(string chatId, string message)
+        {
+            string name = Clients.Caller.userName;
+            string time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+            if (chatId != groupNames.Monitor)
+            {
+                Database.SaveChatLog(chatId, time, name, message);
+            }
+            Clients.Group(chatId).broadcastMessage(chatId, time, name, message);
+        }
+
+        /* ***** MONITOR SPECIFIC FUNCTIONS ***** */
+
         /* Returns True if the user is authenticated, false if not */
         public void CheckAuthenticated()
         {
@@ -27,22 +49,7 @@ namespace SASHAChatAssist
             }
         }
 
-        /* Send a message to the browser console */
-        public void Debug(string message)
-        {
-            Clients.Caller.debug(message);
-        }
-
-        /* Update chat with chat messages */
-        public void BroadcastMessage(string chatId, string message)
-        {
-            string name = Clients.Caller.userName;
-            string time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
-            Clients.Group(chatId).broadcastMessage(chatId, time, name, message);
-        }
-
-        /* Monitor Specific Functions */
-
+        /* Gather required information for monitor clients and update records if necessary */
         public void RegisterMonitor()
         {
 
@@ -97,6 +104,44 @@ namespace SASHAChatAssist
             string sashaSessionRecords = Database.GetSashaSessionRecords();
             Clients.Caller.receiveSashaSessionRecords(sashaSessionRecords);
 
+        }
+
+        /* ***** SASHA SPECIFIC FUNCTIONS ***** */
+
+        /* Add Initial Record to SASHA Sessions */
+        public void RegisterSashaSession(string userId, string agentName, string smpSessionId)
+        {
+            string userid = userId.ToLower();
+            string connectionId = Context.ConnectionId;
+            string userName = Database.GetUserName(userId);
+            if (userName == null)
+            {
+                Database.AddUserRecord(userId.ToLower(), agentName.ToUpper());
+            }
+            Clients.Caller.userId = userId.ToLower();
+            Clients.Caller.userName = agentName.ToUpper();
+            Clients.Caller.smpSessionId = smpSessionId;
+            Groups.Add(connectionId, smpSessionId);
+            string sessionStartTime = "";
+            // Temporary Line to push a date into the field
+            sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+            if (Database.AddSashaSessionRecord(connectionId, userId, smpSessionId, sessionStartTime, ""))
+            {
+                Groups.Add(connectionId, groupNames.Sasha);
+                Groups.Add(connectionId, smpSessionId);
+                Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime, "");
+            }
+        }
+
+        public void SashaInitiateChat(string smpSessionId)
+        {
+            /* User Id of agent requesting Chat */
+            string userId = Clients.Caller.userId;
+            /* UserName of the agent requesting Chat */
+            string userName = Clients.Caller.userName;
+            /* ConnectionId of session requesting chat */
+            string connectionId = Context.ConnectionId;
+            Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId);
         }
 
     }

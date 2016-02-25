@@ -105,5 +105,115 @@ namespace SASHAChatAssist
             }
         }
 
+        /* Saves the Chat Log to the Database */
+        public static void SaveChatLog(string chatId, string time, string name, string message)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                chatLog chatLog = new chatLog();
+                chatLog.id = Guid.NewGuid();
+                chatLog.chatId = chatId;
+                chatLog.time = time;
+                chatLog.name = name;
+                chatLog.message = message;
+                db.chatLogs.Add(chatLog);
+                db.SaveChanges();
+            }
+        }
+
+        /* Adds a record to the SashaSessions Database on connection of a SASHA client */
+        public static bool AddSashaSessionRecord(string connectionId, string userId, string smpSessionId, string sessionStartTime, string milestone)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                sashaSession sashaSession = new sashaSession();
+                if (!db.sashaSessions.Any(s => s.connectionId == connectionId))
+                {
+                    sashaSession.connectionId = connectionId;
+                    sashaSession.userId = userId;
+                    sashaSession.smpSessionId = smpSessionId;
+                    sashaSession.sessionStartTime = sessionStartTime;
+                    sashaSession.milestone = milestone;
+                    db.sashaSessions.Add(sashaSession);
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /* Adds a user record to the users table if one does not exist already */
+        public static void AddUserRecord(string userId, string userName)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                user user = new user();
+                user.userId = userId;
+                user.userName = userName;
+                db.users.Add(user);
+                db.SaveChanges();
+            }
+        }
+
+
+        /* Checks for an available helper and connects them if ready */
+        public static void GetAvailableHelper(string smpSessionId, string userId, string userName, string connectionId)
+        {
+            Dictionary<string, string> returnInfo = new Dictionary<string, string>();
+            using (tsc_tools db = new tsc_tools())
+            {
+                chatHelper chatHelper = new chatHelper();
+                var chatHelperRecord =
+                    (from c in db.chatHelpers
+                     where c.onlineStatus == "Online"
+                     select c
+                    ).FirstOrDefault();
+                if (chatHelperRecord == null)
+                {
+                    /* No Online Chat Helpers */
+                    return;
+                }
+                chatHelperRecord =
+                    (from c in db.chatHelpers
+                     where c.onlineStatus == "Online"
+                         && c.currentChats < c.maximumChats
+                         && c.userId != userId
+                     orderby c.lastChatTime ascending
+                     select c
+                    ).FirstOrDefault();
+                if (chatHelperRecord == null)
+                {
+                    /* Helpers online but all at maximum sessions */
+                    return;
+                }
+                if (chatHelperRecord != null)
+                {
+                    string chatHelperId = chatHelperRecord.userId;
+                    string chatHelperName = chatHelperRecord.user.userName;
+                    string chatHelperConnectionId = chatHelperRecord.connectionId;
+                    string lastChatTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    int currentChats = chatHelperRecord.currentChats + 1;
+                    returnInfo.Add("Available", "True");
+                    returnInfo.Add("chatHelperId", chatHelperId);
+                    returnInfo.Add("chatHelperName", chatHelperName);
+                    chatHelperRecord.currentChats = currentChats;
+                    db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
+                    db.SaveChanges();
+                    chatSession fulfilledChatSession = new chatSession();
+                    fulfilledChatSession.sashaSessionId = smpSessionId;
+                    fulfilledChatSession.agentConnectionId = connectionId;
+                    fulfilledChatSession.helperConnectionId = chatHelperConnectionId;
+                    fulfilledChatSession.agentId = userId;
+                    fulfilledChatSession.helperId = chatHelperId;
+                    fulfilledChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    fulfilledChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    db.chatSessions.Add(fulfilledChatSession);
+                    db.SaveChanges();
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    context.Groups.Add(chatHelperConnectionId, smpSessionId);
+                    context.Clients.Client(chatHelperConnectionId).addChatTab(smpSessionId, userName);
+                }
+            }
+        }
     }
 }

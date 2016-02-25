@@ -13,6 +13,7 @@
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatSessions_users" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatSessions_users1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_sashaSessions_users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_89250_signalrchatModel.chatLog" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
