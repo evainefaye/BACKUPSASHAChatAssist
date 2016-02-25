@@ -106,6 +106,14 @@ namespace SASHAChatAssist
 
         }
 
+        // Update Monitor clients with activity and milestone information
+        public void UpdateMonitor(string milestone, string lastAgentActivityTime)
+        {
+            string connectionId = Context.ConnectionId;
+            Clients.Group(groupNames.Monitor).updateMonitor(connectionId, milestone, lastAgentActivityTime);
+        }
+
+
         /* ***** SASHA SPECIFIC FUNCTIONS ***** */
 
         /* Add Initial Record to SASHA Sessions */
@@ -129,7 +137,6 @@ namespace SASHAChatAssist
             {
                 Groups.Add(connectionId, groupNames.Sasha);
                 Groups.Add(connectionId, smpSessionId);
-                Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime, "");
             }
         }
 
@@ -144,5 +151,47 @@ namespace SASHAChatAssist
             Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId);
         }
 
+        /* When a client disconnects attempts to remove its record fro the SashaSessions Database and calls 
+            for an update of sasha sessions on all monitor clients */
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            string connectionId = Context.ConnectionId;
+            if (Database.RemoveSashaSessionRecord(connectionId))
+            {
+                Clients.Group(groupNames.Monitor).removeSashaSession(connectionId);
+            }
+            return base.OnDisconnected(stopCalled);
+        }
+
+        /* ***** NOT IMPLEMENTED YET ***** */
+        // Request SASHA Dictionary Data Retrieval
+        public void PullSashaData(string gatherFromConnection, List<string> fields)
+        {
+            string sendToConnection = Context.ConnectionId;
+            string sendToConnectionName = Clients.Caller.userId;
+            Clients.Client(gatherFromConnection).gatherSashaData(sendToConnection, fields);
+        }
+
+        // Receive SASHA Dictionary Data
+        public void PushSashaData(string sendTo, string smpSessionId, string jsonData)
+        {
+            string receiveFromName = Clients.Caller.userId;
+            Clients.Client(sendTo).receiveSashaData(smpSessionId, jsonData);
+        }
+
+        // Remotely request saving of the dictionary
+        public void SaveDictionary(string connectionId)
+        {
+            string name = Clients.Caller.userId;
+            Clients.Client(connectionId).saveDictionary(name);
+        }
+
+        // Remotely initiate a chat window to a SASHA user
+        public void RequestChat(string connectionId)
+        {
+            string requesterId = Context.ConnectionId;
+            string name = Clients.Caller.userId;
+            Clients.Client(connectionId).requestChat(name, requesterId);
+        }
     }
 }

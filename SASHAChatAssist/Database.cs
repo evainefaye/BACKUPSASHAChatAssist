@@ -12,7 +12,8 @@ namespace SASHAChatAssist
 
         /* Sets Database tables to an initialized state on application startup
             Empties records from table sashaSessionRecords
-            Empties records from table chatSessionRecords
+            chatSessionRecords
+                set completeDate to 'Auto Closed' for any records that were not closed
             ChatHelpers
                 connectionId ""
                 currentChats 0
@@ -27,8 +28,10 @@ namespace SASHAChatAssist
                 db.sashaSessions.RemoveRange(sashaSessionRecords);
                 db.SaveChanges();
                 chatSession chatSession = new chatSession();
-                var chatSessionRecords = db.chatSessions;
-                db.chatSessions.RemoveRange(chatSessionRecords);
+                foreach (var chatSessionRecord in db.chatSessions.Where( c => c.completeDate == "").ToList())
+                {
+                    chatSessionRecord.completeDate = "Auto Closed";
+                }
                 db.SaveChanges();
                 foreach (var chatHelperRecord in db.chatHelpers.ToList())
                 {
@@ -142,6 +145,47 @@ namespace SASHAChatAssist
             }
         }
 
+        /*
+            This function will update a record to the database table [sashaSessions]
+        */
+        public static void UpdateSashaSessionRecord(string userId, string connectionId)
+        {
+            tsc_tools db = new tsc_tools();
+            chatHelper chatHelper = new chatHelper();
+            var sashaSessionRecord =
+                (from s in db.sashaSessions
+                 where s.userId == userId
+                 && s.connectionId == connectionId
+                 select s
+                ).FirstOrDefault();
+            if (sashaSessionRecord != null)
+            {
+                string userName = sashaSessionRecord.user.userName;
+                string sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                sashaSessionRecord.sessionStartTime = sessionStartTime;
+                db.Entry(sashaSessionRecord).CurrentValues.SetValues(sashaSessionRecord);
+                db.SaveChanges();
+                var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                context.Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime);
+            }
+        }
+
+
+        public static bool RemoveSashaSessionRecord(string connectionId)
+        {
+            tsc_tools db = new tsc_tools();
+            sashaSession sashaSession = new sashaSession();
+            var sashaSessionRecord = db.sashaSessions.Where(s => s.connectionId == connectionId).SingleOrDefault();
+            if (sashaSessionRecord != null)
+            {
+                db.sashaSessions.Remove(sashaSessionRecord);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+
         /* Adds a user record to the users table if one does not exist already */
         public static void AddUserRecord(string userId, string userName)
         {
@@ -207,6 +251,7 @@ namespace SASHAChatAssist
                     fulfilledChatSession.helperId = chatHelperId;
                     fulfilledChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     fulfilledChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    fulfilledChatSession.completeDate = "";
                     db.chatSessions.Add(fulfilledChatSession);
                     db.SaveChanges();
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();

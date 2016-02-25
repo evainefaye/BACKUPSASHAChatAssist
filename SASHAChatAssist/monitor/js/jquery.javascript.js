@@ -72,6 +72,15 @@
 		}
 	};
 
+    // Remove Sasha Client
+	chat.client.removeSashaSession = function (connectionId) {
+	    $("span#timerAge_" + connectionId).countdown("destroy");
+	    $("table#registeredSashaSessions tr#" + connectionId).hide();
+	    setTimeout(function () {
+	        $("table#registeredSashaSessions tr#" + connectionId).remove();
+	    }, 500);
+	}
+
 	/* Receives a JSON object of the sashaSessions Database and adds it to the registeredSashaSessions table */
 	chat.client.receiveSashaSessionRecords = function (sashaSessionRecords) {
 		$.each($.parseJSON(sashaSessionRecords), function (idx, sashaSession) {
@@ -114,6 +123,7 @@
 		})
 	};
 
+    /* Broadcast Message between users */
 	chat.client.broadcastMessage = function (chatId, time, name, message) {
 		time = formatTime(time);
 		// Html encode display name and message.
@@ -125,16 +135,44 @@
 		$("div.container").scrollTop($("div.container")[0].scrollHeight - $("div.container")[0].clientHeight);
 	};
 
+    /* Sends a message to the web console, used for dbugging */
 	chat.client.debug = function (message) {
 		console.log(message);
 	};
 
-	// Needs to be edited now just adds one tab on demand
+	/* Add a Chat Tab when needed */
 	chat.client.addChatTab = function (smpSessionId, userName) {
 		$("div#chatTabs >ul").append("<li><a href='#smpId" + smpSessionId + "' id='smpId_" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
-		$("div#chatTabs").append("<div id='smpId" + smpSessionId + "'>" + userName + "</div>");
+		$("div#chatTabs").append("<div id='smpId" + smpSessionId + "'><div class='container'><table class='chat'><tbody></tbody></table></div><input class='message' placeholder='ENTER YOUR MESSAGE HERE' type='text' /></div>");
 		$("div#chatTabs").tabs("refresh");
+		CRToSend();
 	};
+
+    /* Receive requested SASHA Dictonary Data */
+	chat.client.receiveSashaData = function (smpSessionId, jsonData) {
+	    parseSashaData(smpSessionId, jsonData);
+	};
+
+    /* Updates Monitor for given connection with updated milestone / last Agent Activity Time */
+	chat.client.updateMonitor = function (connectionId, milestone, lastAgentActivityTime) {
+	    $("tr#" + connectionId + " > td.milestone").html(milestone);
+	    time = new Date(lastAgentActivityTime);
+	    year = time.getFullYear();
+	    month = time.getMonth();
+	    day = time.getDate();
+	    hour = time.getHours();
+	    minute = time.getMinutes();
+	    second = time.getSeconds();
+	    $("#lastActivityTime_" + connectionId).countdown('destroy');
+	    $("#lastActivityTime_" + connectionId).countdown({
+	        since: new Date(year, month, day, hour, minute, second),
+	        compact: true,
+	        layout: '{d<} {dn} {dl} {d>} {h<} {hnn} {sep} {h>} {mnn} {sep} {snn}',
+	        format: 'yowdhMS',
+	        onTick: checkStepTime
+	    });
+	}
+
 
     /* **** END CLIENT HUB FUNCTIONS **** */
 
@@ -142,20 +180,46 @@
 	$.connection.hub.start().done(function () {
 		/* Check to see if user is Authenticated
 			Will call registerMonitor of already authenticate, if not it will call getUserId  then registerMonitor */
-		chat.server.checkAuthenticated();
+	    chat.server.checkAuthenticated();
+	    CRToSend();
 
+	    /* Setup request data button */
+	    $("button#requestData").off("click.requestData").on("click.requestData", function () {
+	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
+	            $("span#errorText").html("Must have a connection selected to request dictionary data from!");
+	            return;
+	        } else {
+	            gatherFromConnection = $("input[type=radio][name=connectionId]:checked").val();
+	        }
+	        fieldData = $("textarea#fields").val().trim();
+	        setupPage();
+	        if (fieldData.length > 0) {
+	            $("span#errorText").html("");
+	            fields = fieldData.split(",");
+	            chat.server.pullSashaData(gatherFromConnection, fields);
+	        } else {
+	            $("span#errorText").html("Enter at least one field value to retrieve!");
+	        }
+	    });
 
-		$(".message").keyup(function (event) {
-			if (event.keyCode == 13) {
-				message = $(this).val().trim();
-				if (message != "") {
-					chatId = $(this).parent().attr("id");
-					chat.server.broadcastMessage(chatId, message);
-					/* Clear text box and reset focus for next message */
-					$(this).val("").focus();
-				}
-			}
-		});
+	    // Setup Request Chat Button
+	    $("button#requestChat").off("click.requestChat").on("click.requestChat", function () {
+	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
+	            $("span#errorText").html("Must have a connection selected to request a chat with!");
+	            return;
+	        }
+	        requestChat($("input[type=radio][name=connectionId]:checked").val());
+	    });
+
+	    // Setup Save Dictionary Button
+	    $("button#saveDictionary").off("click.saveDictionary").on("click.requestChat", function () {
+	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
+	            $("span#errorText").html("Must have a connection selected to request a remote dictionary save!");
+	            return;
+	        }
+	        chat.server.saveDictionary($("input[type=radio][name=connectionId]:checked").val());
+	    });
+
 
 
 	});
@@ -207,4 +271,56 @@ sortTable = function () {
 	$.each(rows, function (index, row) {
 		$("#registeredSashaClients").children("tbody").append(row);
 	});
+};
+
+CRtoSend = function () {
+    $(".message").keyup(function (event) {
+        if (event.keyCode == 13) {
+            message = $(this).val().trim();
+            if (message != "") {
+                chatId = $(this).parent().attr("id");
+                chat.server.broadcastMessage(chatId, message);
+                /* Clear text box and reset focus for next message */
+                $(this).val("").focus();
+            }
+        }
+    });
+};
+
+$.fn.addNewRow = function (key, value) {
+    $(this).find("tbody").append("<tr><td>" + key + "</td><td>" + value + "</td></tr>");
+};
+
+requestSashaData = function (requestFrom) {
+    fieldData = $("input#fields").val().trim();
+    setupPage();
+    if (fieldData.length > 0) {
+        $("span#errorText").html("");
+        fields = fieldData.split(",");
+        chat.server.pullSashaData(requestFrom, fields);
+    } else {
+        $("span#errorText").html("Enter at least one value to retrieve!");
+    }
+};
+
+parseSashaData = function (smpSessionId, json) {
+    setupPage();
+    $('div#interactionPanel').show();
+    parsedData = $.parseJSON(json);
+    $.each(parsedData, function (key, value) {
+        value = value.replace(new RegExp('\\\\n', 'g'), '<br />');
+        $("table#resultsTable").addNewRow(key, value);
+    });
+};
+
+setupPage = function () {
+    $("#resultsTable > tbody").html("");
+    $("span#errorText").html("");
+    d = new Date();
+    time = d.toLocaleString();
+    $("span#lastUpdate").html(time);
+};
+
+requestChat = function (connectionId) {
+    chat.server.requestChat(connectionId);
 };

@@ -21,6 +21,7 @@ namespace SASHAChatAssist
         public string helperId { get; set; }
         public string lastActivity { get; set; }
         public string requestDate { get; set; }
+        public string completeDate { get; set; }
     
         public virtual user user { get; set; }
         public virtual user user1 { get; set; }

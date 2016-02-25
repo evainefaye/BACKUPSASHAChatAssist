@@ -37,6 +37,7 @@
           <Property Name="helperId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="lastActivity" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="requestDate" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="completeDate" Type="nvarchar" MaxLength="40" Nullable="false" />
         </EntityType>
         <EntityType Name="sashaSessions">
           <Key>
@@ -155,6 +156,7 @@
           <Property Name="requestDate" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="user" Relationship="Self.FK_chatSessions_users" FromRole="chatSessions" ToRole="users" />
           <NavigationProperty Name="user1" Relationship="Self.FK_chatSessions_users1" FromRole="chatSessions" ToRole="users" />
+          <Property Name="completeDate" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="sashaSession">
           <Key>
@@ -280,6 +282,7 @@
           <EntitySetMapping Name="chatSessions">
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatSession">
               <MappingFragment StoreEntitySet="chatSessions">
+                <ScalarProperty Name="completeDate" ColumnName="completeDate" />
                 <ScalarProperty Name="sashaSessionId" ColumnName="sashaSessionId" />
                 <ScalarProperty Name="agentConnectionId" ColumnName="agentConnectionId" />
                 <ScalarProperty Name="helperConnectionId" ColumnName="helperConnectionId" />
