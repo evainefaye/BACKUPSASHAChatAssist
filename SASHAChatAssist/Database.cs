@@ -14,7 +14,7 @@ namespace SASHAChatAssist
             Empties records from table sashaSessionRecords
             Empties records from table chatSessionRecords
             ChatHelpers
-                connectionStatus "notConnected"
+                connectionId ""
                 currentChats 0
                 lastChatTime CurrentTime
         */
@@ -77,16 +77,31 @@ namespace SASHAChatAssist
                     }
                     else
                     {
+                        int maximumChats = chatHelperRecord.maximumChats;
                         chatHelperRecord.connectionId = connectionId;
                         db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
                         db.SaveChanges();
-                        return "newConnection";
+                        return "";
                     }
                 }
                 else
                 {
                     return "noRecord";
                 }
+            }
+        }
+
+        /* Retrieves fields connectionId, userId, userName (from users), sessionStartTime and milestone from
+            the sashaSessions Database and returns it to the monitor that called for it */
+        public static string GetSashaSessionRecords()
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                sashaSession sashaSession = new sashaSession();
+                var sashaSessionRecord =
+                    from s in db.sashaSessions
+                    select new { s.connectionId, s.userId, s.user.userName, s.sessionStartTime, s.milestone };
+                return JsonConvert.SerializeObject(sashaSessionRecord);
             }
         }
 

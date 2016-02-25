@@ -94,7 +94,7 @@
 
 .container {
 	background-color: #99CCFF;
-	border: thick solid #808080;
+	border: solid 2px #000;
 	padding-top: 5px;
 	padding-right: 5px;
 	margin-top: 20px;
@@ -102,6 +102,7 @@
 	overflow-x: hidden;
 	height: 200px;
 	max-height: 200px;
+    font-size: small;
 }
 
 .container-wrapper {
@@ -109,12 +110,13 @@
 	width:45%
 }
 
-input#message {
+input.message {
 	padding-left: 10px;
 	padding-right: 10px;
 	border: solid 3px black;
     box-sizing: border-box;
 	width: 100%;
+    font-size: small !important
 }
 
 div.table-wrapper {
@@ -166,4 +168,20 @@ div#SashaSessions {
 .attention {
 	color: red;
 	font-weight: bold;
+}
+
+#chatTabs li .ui-icon-close {
+     float: left;
+     margin: 0.4em 0.2em 0 0;
+     cursor: pointer;
+}
+
+table.chat {
+    border-collapse: collapse;
+}
+
+table td.time {
+    vertical-align: top;
+    padding-right: 3px;
+    border-right: solid 1px #000;
 }

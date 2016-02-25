@@ -27,6 +27,19 @@ namespace SASHAChatAssist
             }
         }
 
+        /* Send a message to the browser console */
+        public void Debug(string message)
+        {
+            Clients.Caller.debug(message);
+        }
+
+        /* Update chat with chat messages */
+        public void BroadcastMessage(string chatId, string message)
+        {
+            string name = Clients.Caller.userName;
+            string time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+            Clients.Group(chatId).broadcastMessage(chatId, time, name, message);
+        }
 
         /* Monitor Specific Functions */
 
@@ -71,15 +84,20 @@ namespace SASHAChatAssist
                 return;
             }
 
-            // Add the connection to the group Monitor
+            /* Add the connection to the group Monitor */
             Groups.Add(Context.ConnectionId, groupNames.Monitor);
 
-            // Add the connection to a group based on userId
+            /* Add the connection to a group based on userId */
             Groups.Add(Context.ConnectionId, userId);
+
+            /* Update the userName div on the main page with the recovered userName */
+            Clients.Caller.displayUserName(userName);
+
+            /* Retrieve list of Sasha Sessions from the sashaSessions and push them to the newly connected monitor */
+            string sashaSessionRecords = Database.GetSashaSessionRecords();
+            Clients.Caller.receiveSashaSessionRecords(sashaSessionRecords);
+
         }
-
-
-
 
     }
 }
