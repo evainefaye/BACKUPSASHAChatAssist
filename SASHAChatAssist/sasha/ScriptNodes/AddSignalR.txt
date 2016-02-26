@@ -94,17 +94,17 @@
 			return localTime;
 		};
 
-		/* Function to setup pressing return to send a message to the chat */
 		CRToSend = function() {
-			$("#message").off("keyup.CRToSend").on("keyup.CRToSend",function(event) {
-				if (event.keyCode == 13) {
-					displayName = "'}#{AgentName}#{'";
-					if ($("#message").val().trim() != "") {
-						chat.server.broadcastMessage($("#message").val());
-						$("#message").val("").focus();
-					}
-				}
-			});
-		};
+        $(".message").off("keyup.CRToSend").on("keyup.CRToSend",function(event) {
+            if (event.keyCode == 13) {
+                message = $(this).val().trim();
+                if (message != "") {
+                    chatId = "'}#{smpSessionId}#{'";
+                    chat.server.broadcastMessage($(chatId, message);
+                    $(this).val("").focus();
+                }
+            }
+        });
+    };
 	</script>
 '}
