@@ -24,11 +24,11 @@
 
 					/*  Function to handle broadcasting of chat messages to the SASHA client */
 					chat.client.broadcastMessage = function (chatId, time, name, message) {
-						time = formatTime();
+						time = formatTime(time);
 						var encodedTime = $("<div />").text(time).html();
 						var encodedName = $("<div />").text(name).html();
 						var encodedMsg = $("<div />").text(message).html();
-						$("#discussion").find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
+						$("div#chatWindow").find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
 						$("div#chatWindow").scrollTop($("div#chatWindow")[0].scrollHeight - $("div#chatWindow")[0].clientHeight);
 					};
 

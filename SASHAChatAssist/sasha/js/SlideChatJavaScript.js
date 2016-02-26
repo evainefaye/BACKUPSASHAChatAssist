@@ -1,64 +1,29 @@
 
-		function getContext() {
-			context = wf.getContext();
-			return context;
-		}
+		$(document).ready(function() {
+		    if ($("#openChat").length == 0) {
+		        $("div#headerButtons > div.buttons").append("<button id=openChat class=\"openChat ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only blueButton\" role=button aria-disabled=false><span class=ui-button-text>Open Chat</span></button>");
+		    }
+			
+		    $("body").off("click.openChat").on("click.openChat",".openChat",function () {
+		        openChatWindow();
+		    });
 
-		function getSeparator(splitter) {
-			separator =  "#{\'" + splitter + "\'}";
-			return separator;
-		}
+		    $("body").off("click.closeChat").on("click.closeChat",".closeChat",function () {
+		        closeChatWindow();
+		    });
+			
+		    $("body").prepend("<div id=slideChat><div class=closeChat>X</div><div id=chatWindow><table class=chat><tbody></tbody></table></div><input type=text placeholder=\"ENTER YOUR MESSAGE HERE\" class=message /></div>");
+		});
+ 
+    function openChatWindow () {
+        $("div#slideChat").show();
+        smpSessionId = $("span#sessionId").html();
+        chat.server.sashaInitiateChat(smpSessionId);
+        $("div#slideChat").animate({top: "0"}, 500);
+    }
 
-		function resultsToJSON(fields, data) {
-			result = data.result;
-			if (data.result === null) {
-				result = splitter;
-			}
-			resultArray = result.split(splitter);
-			resultObj = new Object();
-			var arrayLength = fields.length;
-			for (var i = 0; i < arrayLength; i++) {
-				value = resultArray[i].replace(/"/g,"\\\'");
-				field = fields[i];
-				resultObj[field] = value;
-			}
-			json = JSON.stringify(resultObj);
-			return json;
-		}
-
-		function getDictionaryValues(fields) {
-			expression = "";
-			context = getContext();
-			var arrayLength = fields.length;
-			for (var i = 0;i < arrayLength;i++) {
-				field = fields[i];
-				expression = expression + "#{" + fields[i] + "}";
-				if (i < arrayLength - 1) {
-					expression = expression + separator;
-				}
-			}
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				async: false,
-				url: "ExpressionEvaluator.do",
-				success: function(data) {
-					json = resultsToJSON(fields, data);
-				},
-				data : {
-					expression : expression,
-					context : context
-				}
-			});
-		}
-
-		splitter = "{sep}";
-		separator = getSeparator(splitter);
-		
-		/* Function to request data from outside of SASHA */
-		function gatherSashaData(sendTo,fields) {
-			getDictionaryValues(fields);
-			values = $.parseJSON(json);
-			smpSessionId = values.smpSessionId;
-			chat.server.pushSashaData(sendTo,smpSessionId,json);
-		}
+    function closeChatWindow() {
+        $("div#slideChat").animate({top: "-500px"}, 500, function() {
+            $("#slideChat").hide();
+        });
+    }

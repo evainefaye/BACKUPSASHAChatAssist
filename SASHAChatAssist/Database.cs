@@ -239,6 +239,10 @@ namespace SASHAChatAssist
                     ).FirstOrDefault();
                 if (chatHelperRecord == null)
                 {
+                    /* No Online Chat Helpers */
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "There are currently no chat helpers online.");
                     chatSession pendingChatSession = new chatSession();
                     pendingChatSession.sashaSessionId = smpSessionId;
                     pendingChatSession.agentConnectionId = connectionId;
@@ -248,7 +252,6 @@ namespace SASHAChatAssist
                     pendingChatSession.completeDate = "";
                     db.chatSessions.Add(pendingChatSession);
                     db.SaveChanges();
-                    /* No Online Chat Helpers */
                     return;
                 }
                 chatHelperRecord =
@@ -261,6 +264,10 @@ namespace SASHAChatAssist
                     ).FirstOrDefault();
                 if (chatHelperRecord == null)
                 {
+                    /* Helpers online but all at maximum sessions */
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "All available chat helpers are busy.");
                     chatSession pendingChatSession = new chatSession();
                     pendingChatSession.sashaSessionId = smpSessionId;
                     pendingChatSession.agentConnectionId = connectionId;
@@ -270,7 +277,6 @@ namespace SASHAChatAssist
                     pendingChatSession.completeDate = "";
                     db.chatSessions.Add(pendingChatSession);
                     db.SaveChanges();
-                    /* Helpers online but all at maximum sessions */
                     return;
                 }
                 if (chatHelperRecord != null)
@@ -280,6 +286,10 @@ namespace SASHAChatAssist
                     string chatHelperConnectionId = chatHelperRecord.connectionId;
                     string lastChatTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     int currentChats = chatHelperRecord.currentChats + 1;
+                    /* Helper Found */
+                    var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, chatHelperName,"Hello " + userName + " how may I assist you?");
                     returnInfo.Add("Available", "True");
                     returnInfo.Add("chatHelperId", chatHelperId);
                     returnInfo.Add("chatHelperName", chatHelperName);
@@ -297,8 +307,6 @@ namespace SASHAChatAssist
                     fulfilledChatSession.completeDate = "";
                     db.chatSessions.Add(fulfilledChatSession);
                     db.SaveChanges();
-                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
-                    context.Clients.All.debug("Adding to " + smpSessionId);
                     context.Groups.Add(chatHelperConnectionId, smpSessionId);
                     context.Clients.Client(chatHelperConnectionId).addChatTab(smpSessionId, userName);
                 }

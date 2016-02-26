@@ -22,11 +22,11 @@
 
 	                /*  Function to handle broadcasting of chat messages to the SASHA client */
 	                chat.client.broadcastMessage = function (chatId, time, name, message) {
-	                    time = formatTime();
+	                    time = formatTime(time);
 	                    var encodedTime = $("<div />").text(time).html();
 	                    var encodedName = $("<div />").text(name).html();
 	                    var encodedMsg = $("<div />").text(message).html();
-	                    $("#discussion").find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
+	                    $("div#chatWindow").find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
 	                    $("div#chatWindow").scrollTop($("div#chatWindow")[0].scrollHeight - $("div#chatWindow")[0].clientHeight);
 	                };
 
@@ -76,10 +76,12 @@
     window.startHub = function () {
         if (typeof(window.hubStart) === "undefined") {
             window.hubStart = $.connection.hub.start().done(function () {
-                smpSessionId = "'}#{smpSessionId}#{'";
+                rand = Math.floor((Math.random() * 5000000) + 1);
+                smpSessionId = "SMPSESSIONID" + rand;
                 smpSessionId=smpSessionId.replace(/:/g,"");
-                smpSessionId=smpSessionId.replace(/\//g,"");
-                chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId);
+                smpSessionId = smpSessionId.replace(/\//g, "");
+                $('body').append("<div style=display:none;>SessionId:<span id=sessionId>" + smpSessionId + "</span></div>");
+                chat.server.registerSashaSession("USERID","USERNAME",smpSessionId);
                 CRToSend();
             });
         }
@@ -98,7 +100,7 @@
             if (event.keyCode == 13) {
                 message = $(this).val().trim();
                 if (message != "") {
-                    chatId = "SMPSESSIONID";
+                    chatId = $("span#sessionId").html();
                     chat.server.broadcastMessage(chatId, message);
                     $(this).val("").focus();
                 }
