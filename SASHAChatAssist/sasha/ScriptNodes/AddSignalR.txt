@@ -28,7 +28,7 @@
 						var encodedTime = $("<div />").text(time).html();
 						var encodedName = $("<div />").text(name).html();
 						var encodedMsg = $("<div />").text(message).html();
-						$("div#chatWindow").find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
+						$("div#chatWindow").find("tbody").append("<tr><td class=time>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
 						$("div#chatWindow").scrollTop($("div#chatWindow")[0].scrollHeight - $("div#chatWindow")[0].clientHeight);
 					};
 
