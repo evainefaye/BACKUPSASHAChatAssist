@@ -142,6 +142,7 @@ namespace SASHAChatAssist
             {
                 Groups.Add(connectionId, groupNames.Sasha);
                 Groups.Add(connectionId, smpSessionId);
+                Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime, "");
             }
         }
 

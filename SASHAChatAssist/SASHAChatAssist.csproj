@@ -129,6 +129,7 @@
     <Content Include="sasha\ScriptNodes\SlideChatJavaScript.txt" />
     <Content Include="sasha\ScriptNodes\UpdateMonitor.txt" />
     <Content Include="Scripts\jquery-2.2.0.min.map" />
+    <None Include="Properties\PublishProfiles\Hawkbane.biz %28winhost%29.pubxml" />
     <None Include="Properties\PublishProfiles\USB Stick.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
