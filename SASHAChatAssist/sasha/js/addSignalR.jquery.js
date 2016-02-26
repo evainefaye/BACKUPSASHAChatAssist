@@ -98,8 +98,8 @@
             if (event.keyCode == 13) {
                 message = $(this).val().trim();
                 if (message != "") {
-                    chatId = "SMPSESSIONID"
-                    chat.server.broadcastMessage($(chatId, message);
+                    chatId = "SMPSESSIONID";
+                    chat.server.broadcastMessage(chatId, message);
                     $(this).val("").focus();
                 }
             }

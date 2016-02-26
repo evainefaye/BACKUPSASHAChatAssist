@@ -100,7 +100,7 @@
                 message = $(this).val().trim();
                 if (message != "") {
                     chatId = "'}#{smpSessionId}#{'";
-                    chat.server.broadcastMessage($(chatId, message);
+                    chat.server.broadcastMessage(chatId, message);
                     $(this).val("").focus();
                 }
             }
