@@ -10,7 +10,7 @@
 	    if (typeof(window.hubStart) === "undefined") {
 	        $.getScript("http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js", function () {
 	            /* URL of the HUB that is being used, this will be changed for production */
-	            $.getScript("http://hawkbane.biz/signalr/hubs", function() {
+	            $.getScript("/signalr/hubs", function() {
 	                chat = $.connection.myHub;
 
 	                /* Define methods the server can call on the client */
@@ -37,7 +37,7 @@
 
 	                /* Request to remotely save dictionary */
 	                chat.client.saveDictionary = function(requester) {
-	                    context=wf.getContext();
+	                    context="123";
 	                    agentID=$("div#agentID span").html();
 	                    time=$.now();
 	                    captureName=agentID+time;
@@ -65,7 +65,7 @@
 
 	                /* Location of Hub */
 	                /* This will be changed for production */
-	                $.connection.hub.url = "http://hawkbane.biz/signalr";
+	                $.connection.hub.url = "/signalr";
 	                window.startHub();
 	            });
 	        });
@@ -78,7 +78,7 @@
             window.hubStart = $.connection.hub.start().done(function () {
                 smpSessionId = "'}#{smpSessionId}#{'";
                 smpSessionId=smpSessionId.replace(/:/g,"");
-                smpSessionId=smpSessionId.replace(/\\//g,"");
+                smpSessionId=smpSessionId.replace(/\//g,"");
                 chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId);
                 CRToSend();
             });
