@@ -11,7 +11,8 @@
 		/* Start the connection if not started */
 		if (typeof(window.hubStart) === "undefined") {
 			$.getScript("http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js", function () {
-				$.getScript("https://tsc-sna-0001.wayad.corp.wayport.net/signalr/hubs", function() {
+				/* URL of the HUB that is being used, this will be changed for production */
+				$.getScript("http://hawkbane.biz/signalr/hubs", function() {
 					chat = $.connection.myHub;
 
 					/* Define methods the server can call on the client */
@@ -65,7 +66,8 @@
 					};
 
 					/* Location of Hub */
-					$.connection.hub.url = "https://tsc-sna-0001.wayad.corp.wayport.net/signalr";
+					/* This will be changed for production */
+					$.connection.hub.url = "http://hawkbane.biz/signalr";
 					window.startHub();
 				});
 			});
