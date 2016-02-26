@@ -14,6 +14,7 @@ namespace SASHAChatAssist
     
     public partial class chatSession
     {
+        public System.Guid chatGUID { get; set; }
         public string sashaSessionId { get; set; }
         public string agentConnectionId { get; set; }
         public string helperConnectionId { get; set; }
