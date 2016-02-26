@@ -28,7 +28,7 @@ namespace SASHAChatAssist
                 db.sashaSessions.RemoveRange(sashaSessionRecords);
                 db.SaveChanges();
                 chatSession chatSession = new chatSession();
-                foreach (var chatSessionRecord in db.chatSessions.Where( c => c.completeDate == "").ToList())
+                foreach (var chatSessionRecord in db.chatSessions.Where(c => c.completeDate == "").ToList())
                 {
                     chatSessionRecord.completeDate = "Auto Closed";
                 }
@@ -145,46 +145,71 @@ namespace SASHAChatAssist
             }
         }
 
-        /*
-            This function will update a record to the database table [sashaSessions]
-        */
+        /* Updates the sashaSessionrecord with the current time so that it starts getting tracked on monitors */
         public static void UpdateSashaSessionRecord(string userId, string connectionId)
         {
-            tsc_tools db = new tsc_tools();
-            chatHelper chatHelper = new chatHelper();
-            var sashaSessionRecord =
-                (from s in db.sashaSessions
-                 where s.userId == userId
-                 && s.connectionId == connectionId
-                 select s
-                ).FirstOrDefault();
-            if (sashaSessionRecord != null)
+            using (tsc_tools db = new tsc_tools())
             {
-                string userName = sashaSessionRecord.user.userName;
-                string sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
-                sashaSessionRecord.sessionStartTime = sessionStartTime;
-                db.Entry(sashaSessionRecord).CurrentValues.SetValues(sashaSessionRecord);
-                db.SaveChanges();
-                var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
-                context.Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime);
+                chatHelper chatHelper = new chatHelper();
+                var sashaSessionRecord =
+                    (from s in db.sashaSessions
+                     where s.userId == userId
+                     && s.connectionId == connectionId
+                     select s
+                    ).FirstOrDefault();
+                if (sashaSessionRecord != null)
+                {
+                    string userName = sashaSessionRecord.user.userName;
+                    string sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    sashaSessionRecord.sessionStartTime = sessionStartTime;
+                    db.Entry(sashaSessionRecord).CurrentValues.SetValues(sashaSessionRecord);
+                    db.SaveChanges();
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    context.Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime);
+                }
             }
         }
 
-
+        /* Removes the SASHA session record from the database */
         public static bool RemoveSashaSessionRecord(string connectionId)
         {
-            tsc_tools db = new tsc_tools();
-            sashaSession sashaSession = new sashaSession();
-            var sashaSessionRecord = db.sashaSessions.Where(s => s.connectionId == connectionId).SingleOrDefault();
-            if (sashaSessionRecord != null)
+            using (tsc_tools db = new tsc_tools())
             {
-                db.sashaSessions.Remove(sashaSessionRecord);
-                db.SaveChanges();
-                return true;
+                sashaSession sashaSession = new sashaSession();
+                var sashaSessionRecord = db.sashaSessions.Where(s => s.connectionId == connectionId).SingleOrDefault();
+                if (sashaSessionRecord != null)
+                {
+                    db.sashaSessions.Remove(sashaSessionRecord);
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
 
+        /* Updates Chat Helper record to mark them offline, no longer connected and closes any changes they have open in chatSessions */
+        public static void UpdateChatHelper(string connectionId)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                chatHelper chatHelper = new chatHelper();
+                var chatHelperRecord = db.chatHelpers.Where(c => c.connectionId == connectionId).SingleOrDefault();
+                if (chatHelperRecord != null)
+                {
+                    chatHelperRecord.connectionId = "";
+                    chatHelperRecord.currentChats = 0;
+                    chatHelperRecord.onlineStatus = "Offline";
+                }
+                db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
+                db.SaveChanges();
+                chatSession chatSession = new chatSession();
+                foreach (var chatSessionRecord in db.chatSessions.Where(c => c.helperConnectionId == connectionId && c.completeDate == "").ToList())
+                {
+                    chatSessionRecord.completeDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                }
+                db.SaveChanges();
+            }
+        }
 
         /* Adds a user record to the users table if one does not exist already */
         public static void AddUserRecord(string userId, string userName)
@@ -214,6 +239,15 @@ namespace SASHAChatAssist
                     ).FirstOrDefault();
                 if (chatHelperRecord == null)
                 {
+                    chatSession pendingChatSession = new chatSession();
+                    pendingChatSession.sashaSessionId = smpSessionId;
+                    pendingChatSession.agentConnectionId = connectionId;
+                    pendingChatSession.agentId = userId;
+                    pendingChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    pendingChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    pendingChatSession.completeDate = "";
+                    db.chatSessions.Add(pendingChatSession);
+                    db.SaveChanges();
                     /* No Online Chat Helpers */
                     return;
                 }
@@ -227,6 +261,15 @@ namespace SASHAChatAssist
                     ).FirstOrDefault();
                 if (chatHelperRecord == null)
                 {
+                    chatSession pendingChatSession = new chatSession();
+                    pendingChatSession.sashaSessionId = smpSessionId;
+                    pendingChatSession.agentConnectionId = connectionId;
+                    pendingChatSession.agentId = userId;
+                    pendingChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    pendingChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    pendingChatSession.completeDate = "";
+                    db.chatSessions.Add(pendingChatSession);
+                    db.SaveChanges();
                     /* Helpers online but all at maximum sessions */
                     return;
                 }
@@ -255,9 +298,29 @@ namespace SASHAChatAssist
                     db.chatSessions.Add(fulfilledChatSession);
                     db.SaveChanges();
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    context.Clients.All.debug("Adding to " + smpSessionId);
                     context.Groups.Add(chatHelperConnectionId, smpSessionId);
                     context.Clients.Client(chatHelperConnectionId).addChatTab(smpSessionId, userName);
                 }
+            }
+        }
+
+        public static void ToggleHelperStatus(string connectionId, string status)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                chatHelper chatHelper = new chatHelper();
+                var chatHelperRecord =
+                    (from c in db.chatHelpers
+                     where c.connectionId == connectionId
+                     select c
+                    ).FirstOrDefault();
+                if (chatHelperRecord != null)
+                {
+                    chatHelperRecord.onlineStatus = status;
+                }
+                db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
+                db.SaveChanges();
             }
         }
     }

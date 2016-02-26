@@ -106,13 +106,18 @@ namespace SASHAChatAssist
 
         }
 
-        // Update Monitor clients with activity and milestone information
+        /* Update Monitor clients with activity and milestone information */
         public void UpdateMonitor(string milestone, string lastAgentActivityTime)
         {
             string connectionId = Context.ConnectionId;
             Clients.Group(groupNames.Monitor).updateMonitor(connectionId, milestone, lastAgentActivityTime);
         }
 
+        /* Updates the Toggle Helper Status to the correct value */
+        public void ToggleHelperStatus(string status)
+        {
+            Database.ToggleHelperStatus(Context.ConnectionId, status);
+        }
 
         /* ***** SASHA SPECIFIC FUNCTIONS ***** */
 
@@ -140,6 +145,15 @@ namespace SASHAChatAssist
             }
         }
 
+        /* Sets the Session Start Time to a value indicating that you have begun the actual SASHA flow and should be tracked */
+        public void UpdateSashaSession()
+        {
+            string userId = Clients.Caller.userId;
+            string connectionId = Context.ConnectionId;
+            Database.UpdateSashaSessionRecord(userId, connectionId);
+        }
+
+
         public void SashaInitiateChat(string smpSessionId)
         {
             /* User Id of agent requesting Chat */
@@ -160,6 +174,7 @@ namespace SASHAChatAssist
             {
                 Clients.Group(groupNames.Monitor).removeSashaSession(connectionId);
             }
+            Database.UpdateChatHelper(connectionId);
             return base.OnDisconnected(stopCalled);
         }
 

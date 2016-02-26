@@ -142,10 +142,10 @@
 
 	/* Add a Chat Tab when needed */
 	chat.client.addChatTab = function (smpSessionId, userName) {
-		$("div#chatTabs >ul").append("<li><a href='#smpId" + smpSessionId + "' id='smpId_" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
-		$("div#chatTabs").append("<div id='smpId" + smpSessionId + "'><div class='container'><table class='chat'><tbody></tbody></table></div><input class='message' placeholder='ENTER YOUR MESSAGE HERE' type='text' /></div>");
+		$("div#chatTabs > ul").append("<li><a href='#" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
+		$("div#chatTabs").append("<div id='" + smpSessionId + "'><div class='container'><table class='chat'><tbody></tbody></table></div><input class='message' placeholder='ENTER YOUR MESSAGE HERE' type='text' /></div>");
 		$("div#chatTabs").tabs("refresh");
-		CRToSend();
+		CRtoSend();
 	};
 
     /* Receive requested SASHA Dictonary Data */
@@ -157,6 +157,10 @@
 	chat.client.updateMonitor = function (connectionId, milestone, lastAgentActivityTime) {
 	    $("tr#" + connectionId + " > td.milestone").html(milestone);
 	    time = new Date(lastAgentActivityTime);
+	    lastAgentActivityTime = lastAgentActivityTime.replace(" ", "T");
+	    lastAgentActivityTime = lastAgentActivityTime + "-0600";
+	    /* Because I cannot determine the timezone of the server to get correct time conversion for the client, I am instead using hte local time at the client */
+	    time = new Date();
 	    year = time.getFullYear();
 	    month = time.getMonth();
 	    day = time.getDate();
@@ -181,7 +185,17 @@
 		/* Check to see if user is Authenticated
 			Will call registerMonitor of already authenticate, if not it will call getUserId  then registerMonitor */
 	    chat.server.checkAuthenticated();
-	    CRToSend();
+	    CRtoSend();
+	    /* Handle Toggling online status */
+	    $("input#onlineStatus").off("click.onlineStatus").on("click.onlineStatus", function () {
+	        if ($(this).val() == "Make Available For Chat") {
+	            $(this).prop("value", "Make Offline For Chat");
+	            chat.server.toggleHelperStatus("Online")
+	        } else {
+	            $(this).prop("value", "Make Available For Chat");
+	            chat.server.toggleHelperStatus("Offline")
+	        }
+	    });
 
 	    /* Setup request data button */
 	    $("button#requestData").off("click.requestData").on("click.requestData", function () {
