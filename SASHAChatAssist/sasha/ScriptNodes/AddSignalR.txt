@@ -83,8 +83,6 @@
 					smpSessionId=smpSessionId.replace(/\\//g,"");
 					chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId);
 					CRToSend();
-					$.getScript("js/AttachMonitor.js");
-
 				});
 			}
 		};

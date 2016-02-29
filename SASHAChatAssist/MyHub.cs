@@ -136,8 +136,7 @@ namespace SASHAChatAssist
             Clients.Caller.smpSessionId = smpSessionId;
             Groups.Add(connectionId, smpSessionId);
             string sessionStartTime = "";
-            // Temporary Line to push a date into the field
-            sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+          //  sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
             if (Database.AddSashaSessionRecord(connectionId, userId, smpSessionId, sessionStartTime, ""))
             {
                 Groups.Add(connectionId, groupNames.Sasha);

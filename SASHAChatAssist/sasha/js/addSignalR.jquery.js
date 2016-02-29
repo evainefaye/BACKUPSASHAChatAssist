@@ -83,6 +83,9 @@
                 $('body').append("<div style=display:none;>SessionId:<span id=sessionId>" + smpSessionId + "</span></div>");
                 chat.server.registerSashaSession("USERID","USERNAME",smpSessionId);
                 CRToSend();
+                $("input#startTracking").off("click.StartTracking").on("click.startTracking", function () {
+                    $.getScript("js/AttachMonitor.js");
+                })
             });
         }
     };
