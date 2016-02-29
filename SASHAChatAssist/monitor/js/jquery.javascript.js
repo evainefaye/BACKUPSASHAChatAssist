@@ -83,44 +83,44 @@
 
 	/* Receives a JSON object of the sashaSessions Database and adds it to the registeredSashaSessions table */
 	chat.client.receiveSashaSessionRecords = function (sashaSessionRecords) {
-		$.each($.parseJSON(sashaSessionRecords), function (idx, sashaSession) {
-			/* Skip record if sessionStartTime is not set */
-			if (sashaSession.sessionStartTime != "") {
-				connectionId = sashaSession.connectionId;
-				userId = sashaSession.userId;
-				userName = sashaSession.userName;
-				sessionElapsedTime = sashaSession.sessionStartTime;
-				sessionStartTime = sashaSession.sessionStartTime;
-				sessionStartTime = new Date(sessionStartTime);
-				sessionStartTime = formatTime(sessionStartTime);
-				if ($("table#registeredSashaSessions tr#" + connectionId).length == 0) {
-					$("table#registeredSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td><td class='center'>" + localTime + "</td><td class=sessionDuration><span class='session' id=timerAge_" + connectionId + "></span></td><td class='stepName milestone'> Populate on Next Action</td><td class='stepDuration lastAgentActivityTime'><span class='step' id=lastActivityTime_" + connectionId + ">Populate on Next Action</span></td></tr>");
-					time = new Date(sessionElapsedTime);
-					year = time.getFullYear();
-					month = time.getMonth();
-					day = time.getDate();
-					hour = time.getHours();
-					minute = time.getMinutes();
-					second = time.getSeconds();
-					$("#timerAge_" + connectionId).countdown('destroy');
-					$("#timerAge_" + connectionId).countdown({
-						since: new Date(year, month, day, hour, minute, second),
-						compact: true,
-						layout: '{d<} {dn} {dl} {d>} {h<} {hnn} {sep} {h>} {mnn} {sep} {snn}',
-						format: 'yowdhMS',
-						onTick: checkSessionTime
-					});
-					$('#registeredSashaSessions tbody tr').on('click', function () {
-						$(this).find('td input:radio').prop('checked', true);
-						$('.selectedRow').removeClass('selectedRow');
-						$(this).addClass('selectedRow');
-						$('div#interactionPanel').show();
-						$('button#requestData').click();
-					});
-				}
-				sortTable();
-			}
-		})
+	    $.each($.parseJSON(sashaSessionRecords), function (idx, sashaSession) {
+	        /* Skip record if sessionStartTime is not set */
+	        if (sashaSession.sessionStartTime != "") {
+	            connectionId = sashaSession.connectionId;
+	            userId = sashaSession.userId;
+	            userName = sashaSession.userName;
+	            sessionElapsedTime = sashaSession.sessionStartTime;
+	            sessionStartTime = sashaSession.sessionStartTime;
+	            sessionStartTime = new Date(sessionStartTime);
+	            sessionStartTime = formatTime(sessionStartTime);
+	            if ($("table#registeredSashaSessions tr#" + connectionId).length == 0) {
+	                $("table#registeredSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td><td class='center'>" + localTime + "</td><td class=sessionDuration><span class='session' id=timerAge_" + connectionId + "></span></td><td class='stepName milestone'> Populate on Next Action</td><td class='stepDuration lastAgentActivityTime'><span class='step' id=lastActivityTime_" + connectionId + ">Populate on Next Action</span></td></tr>");
+	                time = new Date(sessionElapsedTime);
+	                year = time.getFullYear();
+	                month = time.getMonth();
+	                day = time.getDate();
+	                hour = time.getHours();
+	                minute = time.getMinutes();
+	                second = time.getSeconds();
+	                $("#timerAge_" + connectionId).countdown('destroy');
+	                $("#timerAge_" + connectionId).countdown({
+	                    since: new Date(year, month, day, hour, minute, second),
+	                    compact: true,
+	                    layout: '{d<} {dn} {dl} {d>} {h<} {hnn} {sep} {h>} {mnn} {sep} {snn}',
+	                    format: 'yowdhMS',
+	                    onTick: checkSessionTime
+	                });
+	                $('#registeredSashaSessions tbody tr').on('click', function () {
+	                    $(this).find('td input:radio').prop('checked', true);
+	                    $('.selectedRow').removeClass('selectedRow');
+	                    $(this).addClass('selectedRow');
+	                    $('div#interactionPanel').show();
+	                    $('button#requestData').click();
+	                });
+	            }
+	            sortTable();
+	        }
+	    });
 	};
 
     /* Broadcast Message between users */
@@ -130,21 +130,31 @@
 		var encodedTime = $("<div />").text(time).html();
 		var encodedName = $("<div />").text(name).html();
 		var encodedMsg = $("<div />").text(message).html();
-		// Add the message to the page. 
+	    // Add the message to the page.
 		$("div#" + chatId ).find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
 		$("div.container").scrollTop($("div.container")[0].scrollHeight - $("div.container")[0].clientHeight);
+		if ($("#chatTabs ul li.ui-state-active").attr("chatid") != chatId) {
+		    $("#chatTabs .ui-tabs-nav a[href='#" + chatId + "']").addClass("pendingMessage");
+		}
 	};
 
-    /* Sends a message to the web console, used for dbugging */
+    /* Sends a message to the web console, used for debugging */
 	chat.client.debug = function (message) {
 		console.log(message);
 	};
 
 	/* Add a Chat Tab when needed */
 	chat.client.addChatTab = function (smpSessionId, userName) {
-		$("div#chatTabs > ul").append("<li><a href='#" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
+	    smpSessionId = smpSessionId.replace(/:/g, "");
+	    smpSessionId = smpSessionId.replace(/\//g, "");
+	    $("div#chatTabs > ul").append("<li chatId='" + smpSessionId + "'><a href='#" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
 		$("div#chatTabs").append("<div id='" + smpSessionId + "'><div class='container'><table class='chat'><tbody></tbody></table></div><input class='message' placeholder='ENTER YOUR MESSAGE HERE' type='text' /></div>");
 		$("div#chatTabs").tabs("refresh");
+        /* Highlight tab if it is not active and content has been added to it */
+		$("#chatTabs .ui-tabs-nav li").off("click.higlight").on("click.highlight", function () {
+		    $(this).find("a").removeClass("pendingMessage");
+            console.log("removed");
+		});
 		CRtoSend();
 	};
 
@@ -216,7 +226,7 @@
 	        }
 	    });
 
-	    // Setup Request Chat Button
+	    /* Setup Request Chat Button */
 	    $("button#requestChat").off("click.requestChat").on("click.requestChat", function () {
 	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
 	            $("span#errorText").html("Must have a connection selected to request a chat with!");
@@ -225,7 +235,7 @@
 	        requestChat($("input[type=radio][name=connectionId]:checked").val());
 	    });
 
-	    // Setup Save Dictionary Button
+	    /* Setup Save Dictionary Button */
 	    $("button#saveDictionary").off("click.saveDictionary").on("click.requestChat", function () {
 	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
 	            $("span#errorText").html("Must have a connection selected to request a remote dictionary save!");
@@ -233,8 +243,6 @@
 	        }
 	        chat.server.saveDictionary($("input[type=radio][name=connectionId]:checked").val());
 	    });
-
-
 
 	});
 

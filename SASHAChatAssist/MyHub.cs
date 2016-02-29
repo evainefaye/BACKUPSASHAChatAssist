@@ -178,8 +178,7 @@ namespace SASHAChatAssist
             return base.OnDisconnected(stopCalled);
         }
 
-        /* ***** NOT IMPLEMENTED YET ***** */
-        // Request SASHA Dictionary Data Retrieval
+        /* Request SASHA Dictionary Data Retrieval */
         public void PullSashaData(string gatherFromConnection, List<string> fields)
         {
             string sendToConnection = Context.ConnectionId;
@@ -187,26 +186,32 @@ namespace SASHAChatAssist
             Clients.Client(gatherFromConnection).gatherSashaData(sendToConnection, fields);
         }
 
-        // Receive SASHA Dictionary Data
+        /* Receive SASHA Dictionary Data */
         public void PushSashaData(string sendTo, string smpSessionId, string jsonData)
         {
             string receiveFromName = Clients.Caller.userId;
             Clients.Client(sendTo).receiveSashaData(smpSessionId, jsonData);
         }
 
-        // Remotely request saving of the dictionary
+        /* Remotely request saving of the dictionary */
         public void SaveDictionary(string connectionId)
         {
             string name = Clients.Caller.userId;
-            Clients.Client(connectionId).saveDictionary(name);
+            string requesterId = Clients.Caller.ConnectionId;
+            Clients.Client(connectionId).saveDictionary(requesterId);
         }
 
-        // Remotely initiate a chat window to a SASHA user
+        /* Remotely initiate a chat window to a SASHA user */
         public void RequestChat(string connectionId)
         {
             string requesterId = Context.ConnectionId;
             string name = Clients.Caller.userId;
             Clients.Client(connectionId).requestChat(name, requesterId);
+        }
+
+        public void NotifyDictionarySaved(string connectionId, string dictionaryName)
+        {
+            Clients.Client(connectionId).throwError("Dictionary Saved", "Dictionary has been saved with the name of " + dictionaryName);
         }
     }
 }

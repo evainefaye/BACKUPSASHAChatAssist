@@ -38,7 +38,7 @@
 					};
 
 					/* Request to remotely save dictionary */
-					chat.client.saveDictionary = function(requester) {
+					chat.client.saveDictionary = function(requesterId) {
 						context=wf.getContext();
 						agentID=$("div#agentID span").html();
 						time=$.now();
@@ -51,6 +51,8 @@
 								captureName: captureName,
 								context: context
 							}
+						}).done(function() {
+							chat.server.notifyDictionarySaved(requesterId, captureName);
 						});
 					};
 

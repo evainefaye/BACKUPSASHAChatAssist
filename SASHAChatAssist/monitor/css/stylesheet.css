@@ -185,3 +185,42 @@ table td.time {
     padding-right: 3px;
     border-right: solid 1px #000;
 }
+
+.pendingMessage {
+    -webkit-animation-name: blinkPending;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-play-state: running;
+
+    animation-name: blinkPending;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+    background-color: #fff;
+}
+
+@-webkit-keyframes blinkPending {
+    0% {
+        background-color: red;
+    }
+    50.0% {
+        background-color: #fff;
+    }
+    100.0% {
+        background-color: red;
+    }
+}
+
+@keyframes blinkPending {
+    0% {
+        background-color: red;
+    }
+    50.0% {
+        background-color: #fff;
+    }
+    100.0% {
+        background-color: red;
+    }
+}
