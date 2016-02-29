@@ -162,7 +162,10 @@ namespace SASHAChatAssist
             string userName = Clients.Caller.userName;
             /* ConnectionId of session requesting chat */
             string connectionId = Context.ConnectionId;
-            Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId);
+            if (Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId))
+            {
+                Clients.Caller.openChatWindow();
+            }
         }
 
         /* When a client disconnects attempts to remove its record fro the SashaSessions Database and calls 
@@ -197,8 +200,8 @@ namespace SASHAChatAssist
         public void SaveDictionary(string connectionId)
         {
             string name = Clients.Caller.userId;
-            string requesterId = Clients.Caller.ConnectionId;
-            Clients.Client(connectionId).saveDictionary(requesterId);
+            string requestId = Context.ConnectionId;
+            Clients.Client(connectionId).saveDictionary(requestId);
         }
 
         /* Remotely initiate a chat window to a SASHA user */
@@ -211,6 +214,8 @@ namespace SASHAChatAssist
 
         public void NotifyDictionarySaved(string connectionId, string dictionaryName)
         {
+            Clients.All.debug(connectionId);
+            Clients.All.debug(dictionaryName);
             Clients.Client(connectionId).throwError("Dictionary Saved", "Dictionary has been saved with the name of " + dictionaryName);
         }
     }

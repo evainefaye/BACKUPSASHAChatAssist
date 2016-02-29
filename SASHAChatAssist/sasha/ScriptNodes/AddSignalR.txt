@@ -32,6 +32,12 @@
 						$("div#chatWindow").scrollTop($("div#chatWindow")[0].scrollHeight - $("div#chatWindow")[0].clientHeight);
 					};
 
+					/* Forces the chat window to display on the SASHA client */
+					chat.client.openChatWindow = function () {
+						$("div#slideChat").show();
+						$("div#slideChat").animate({top: "0"}, 500);
+					};
+
 					/* Request to gather SASHA Dictionary Data for broadcast */
 					chat.client.gatherSashaData = function (sendTo,fields) {
 						gatherSashaData(sendTo,fields);

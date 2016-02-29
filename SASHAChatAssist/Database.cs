@@ -226,7 +226,7 @@ namespace SASHAChatAssist
 
 
         /* Checks for an available helper and connects them if ready */
-        public static void GetAvailableHelper(string smpSessionId, string userId, string userName, string connectionId)
+        public static bool GetAvailableHelper(string smpSessionId, string userId, string userName, string connectionId)
         {
             Dictionary<string, string> returnInfo = new Dictionary<string, string>();
             using (tsc_tools db = new tsc_tools())
@@ -253,7 +253,7 @@ namespace SASHAChatAssist
                     ChatSession.completeDate = "";
                     db.chatSessions.Add(ChatSession);
                     db.SaveChanges();
-                    return;
+                    return false;
                 }
                 chatHelperRecord =
                     (from c in db.chatHelpers
@@ -279,7 +279,7 @@ namespace SASHAChatAssist
                     ChatSession.completeDate = "";
                     db.chatSessions.Add(ChatSession);
                     db.SaveChanges();
-                    return;
+                    return false;
                 }
                 if (chatHelperRecord != null)
                 {
@@ -313,6 +313,7 @@ namespace SASHAChatAssist
                     context.Groups.Add(chatHelperConnectionId, smpSessionId);
                     context.Clients.Client(chatHelperConnectionId).addChatTab(smpSessionId, userName);
                 }
+                return true;
             }
         }
 

@@ -6,7 +6,7 @@
 			}
 			
 			$("body").off("click.openChat").on("click.openChat",".openChat",function () {
-				openChatWindow();
+				requestChatFromSASHA();
 			});
 
 			$("body").off("click.closeChat").on("click.closeChat",".closeChat",function () {
@@ -16,12 +16,15 @@
 			$("body").prepend("<div id=slideChat><div class=closeChat>X</div><div id=chatWindow><table class=chat><tbody></tbody></table></div><input type=text placeholder=\\"ENTER YOUR MESSAGE HERE\\" class=message /></div>");
 		});
  
-		function openChatWindow () {
-			$("div#slideChat").show();
+		function requestChatFromSASHA () {
 			smpSessionId = "'}#{smpSessionId}#{'";
 			smpSessionId=smpSessionId.replace(/:/g,"");
 			smpSessionId=smpSessionId.replace(/\\//g,"");			
 			chat.server.sashaInitiateChat(smpSessionId);
+		}
+
+		function openChatWindow () {
+			$("div#slideChat").show();
 			$("div#slideChat").animate({top: "0"}, 500);
 		}
 
