@@ -101,9 +101,11 @@
             if (event.keyCode == 13) {
                 message = $(this).val().trim();
                 if (message != "") {
-                    chatId = "'}#{smpSessionId}#{'";
-                    chat.server.broadcastMessage(chatId, message);
-                    $(this).val("").focus();
+			chatId = "'}#{smpSessionId}#{'";
+			chatId=chatId.replace(/:/g,"");
+			chatid=chatId.replace(/\\//g,"");                
+                    	chat.server.broadcastMessage(chatId, message);
+                    	$(this).val("").focus();
                 }
             }
         });
