@@ -153,7 +153,6 @@
         /* Highlight tab if it is not active and content has been added to it */
 		$("#chatTabs .ui-tabs-nav li").off("click.higlight").on("click.highlight", function () {
 		    $(this).find("a").removeClass("pendingMessage");
-            console.log("removed");
 		});
 		CRtoSend();
 	};

@@ -162,10 +162,15 @@ namespace SASHAChatAssist
             string userName = Clients.Caller.userName;
             /* ConnectionId of session requesting chat */
             string connectionId = Context.ConnectionId;
-            if (Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId))
-            {
-                Clients.Caller.openChatWindow();
-            }
+            var d = Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId);
+            Clients.All.debug(d);
+            Clients.Caller.openChatWindow();
+        }
+
+        /* Opens the chat Window after succesful chat connection */
+        public void OpenChatWindow()
+        {
+
         }
 
         /* When a client disconnects attempts to remove its record fro the SashaSessions Database and calls 

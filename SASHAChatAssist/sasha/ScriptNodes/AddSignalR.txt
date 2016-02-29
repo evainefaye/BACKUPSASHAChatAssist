@@ -62,6 +62,19 @@
 						});
 					};
 
+					/* Will generate an error message dialog box with the given title and message. Disconnects from the server. */
+					chat.client.throwError = function (title, message) {
+						$.connection.hub.stop();
+						$("<div title='" + title + "'>" + message + "</div>").dialog({
+							modal: true,
+							buttons: {
+								Ok: function () {
+									$(this).dialog("close");
+								}
+							}
+						});
+					};
+
 					/* Function to open chat window within sasha */
 					chat.client.requestChat = function (requester,requesterConnectionId) {
 						if ($("div#slideChat").is(":visible")) {

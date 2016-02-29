@@ -243,6 +243,7 @@ namespace SASHAChatAssist
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
                     var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "There are currently no chat helpers online.");
+                    context.Clients.Client(connectionId).throwError("Notice","There are currently no chat helpers online.");
                     chatSession ChatSession = new chatSession();
                     ChatSession.chatGUID = Guid.NewGuid();
                     ChatSession.sashaSessionId = smpSessionId;
