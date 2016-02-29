@@ -163,7 +163,6 @@ namespace SASHAChatAssist
             /* ConnectionId of session requesting chat */
             string connectionId = Context.ConnectionId;
             var d = Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId);
-            Clients.All.debug(d);
             Clients.Caller.openChatWindow();
         }
 

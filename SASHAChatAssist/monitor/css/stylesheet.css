@@ -224,3 +224,7 @@ table td.time {
         background-color: red;
     }
 }
+
+div#wrapper {
+    display: none;
+}

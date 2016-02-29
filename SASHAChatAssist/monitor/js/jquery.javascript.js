@@ -38,6 +38,7 @@
 
 	/* update div#userName with the userName of the user after Database Lookup */
 	chat.client.displayUserName = function (userName) {
+	    $("div#wrapper").show();
 		$("div#userName").html(userName);
 	};
 
