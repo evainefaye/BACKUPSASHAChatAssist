@@ -18,7 +18,10 @@
  
 		function openChatWindow () {
 			$("div#slideChat").show();
-			chat.server.sashaInitiateChat("'}#{smpSessionId}#{'");
+			smpSessionId = "'}#{smpSessionId}#{'";
+			smpSessionId=smpSessionId.replace(/:/g,"");
+			smpSessionId=smpSessionId.replace(/\\//g,"");			
+			chat.server.sashaInitiateChat(smpSessionId);
 			$("div#slideChat").animate({top: "0"}, 500);
 		}
 
