@@ -23,7 +23,6 @@
 			info = wf.getStepInfo();
 			flowName = info.flowName;
 			stepName = info.stepName;
-			alert (flowName + " " + stepName);
 			chat.server.sashaInitiateChat(smpSessionId, flowName, stepName);
 		}
 

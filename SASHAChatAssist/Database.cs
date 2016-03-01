@@ -251,6 +251,8 @@ namespace SASHAChatAssist
                     ChatSession.agentId = userId;
                     ChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+                    ChatSession.flowName = flowName;
+                    ChatSession.stepName = stepName;
                     db.chatSessions.Add(ChatSession);
                     db.SaveChanges();
                     return false;
@@ -278,6 +280,8 @@ namespace SASHAChatAssist
                     ChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.completeDate = "";
+                    ChatSession.flowName = flowName;
+                    ChatSession.stepName = stepName;
                     db.chatSessions.Add(ChatSession);
                     db.SaveChanges();
                     return false;
@@ -309,6 +313,8 @@ namespace SASHAChatAssist
                     ChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.completeDate = "";
+                    ChatSession.flowName = flowName;
+                    ChatSession.stepName = stepName;
                     db.chatSessions.Add(ChatSession);
                     db.SaveChanges();
                     context.Groups.Add(chatHelperConnectionId, smpSessionId);

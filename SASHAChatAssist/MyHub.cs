@@ -162,7 +162,7 @@ namespace SASHAChatAssist
             string userName = Clients.Caller.userName;
             /* ConnectionId of session requesting chat */
             string connectionId = Context.ConnectionId;
-            var d = Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId, flowName, stepName);
+            Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId, flowName, stepName);
             Clients.Caller.openChatWindow();
         }
 
