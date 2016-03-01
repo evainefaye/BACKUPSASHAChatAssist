@@ -63,8 +63,10 @@
 					};
 
 					/* Will generate an error message dialog box with the given title and message. Disconnects from the server. */
-					chat.client.throwMessage = function (title, message) {
-						$.connection.hub.stop();
+					chat.client.throwMessage = function (title, message, stopConnection) {
+						if (stopConnection) {
+							$.connection.hub.stop();
+						}
 						$("<div title=\'" + title + "\'>" + message + "</div>").dialog({
 							modal: true,
 							buttons: {
