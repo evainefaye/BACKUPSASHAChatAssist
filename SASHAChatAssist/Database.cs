@@ -241,21 +241,28 @@ namespace SASHAChatAssist
                 {
                     /* No Online Chat Helpers */
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    context.Clients.All.debug("Detected Blank");
                     var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
   //                  context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "There are currently no chat helpers online.");
-                    context.Clients.Client(connectionId).throwError("Notice","There are currently no chat helpers online.");
+                    context.Clients.Client(connectionId).throwMessage("Notice","There are currently no chat helpers online.", false);
                     chatSession ChatSession = new chatSession();
                     ChatSession.chatGUID = Guid.NewGuid();
+                    context.Clients.All.debug("GUID: " + ChatSession.chatGUID);
                     ChatSession.sashaSessionId = smpSessionId;
+                    context.Clients.All.debug("sashaSessionId: " + ChatSession.sashaSessionId);
                     ChatSession.agentConnectionId = connectionId;
-                    ChatSession.helperConnectionId = "";
+                    context.Clients.All.debug("agentConnectionId: " + ChatSession.agentConnectionId);
                     ChatSession.agentId = userId;
-                    ChatSession.helperId = "";
+                    context.Clients.All.debug("agentId: " + ChatSession.agentId);
                     ChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
-                    ChatSession.completeDate = "";
+                    context.Clients.All.debug("lastActivity: " + ChatSession.lastActivity);
+                    context.Clients.All.debug("requestDate: " + ChatSession.requestDate);
+                    context.Clients.All.debug("completeDate: " + ChatSession.completeDate);
                     db.chatSessions.Add(ChatSession);
+                    context.Clients.All.debug("test9");
                     db.SaveChanges();
+                    context.Clients.All.debug("test10");
                     return false;
                 }
                 chatHelperRecord =
@@ -271,20 +278,29 @@ namespace SASHAChatAssist
                     /* Helpers online but all at maximum sessions */
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
                     var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
-                    context.Clients.Client(connectionId).throwError("Notice", "All available chat helpers are busy.");
+                    context.Clients.Client(connectionId).throwMessage("Notice", "All available chat helpers are busy.",false);
 //                    context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "All available chat helpers are busy.");
                     chatSession ChatSession = new chatSession();
+                    context.Clients.Client(connectionId).debug("test1");
                     ChatSession.chatGUID = Guid.NewGuid();
                     ChatSession.sashaSessionId = smpSessionId;
+                    context.Clients.Client(connectionId).debug("test2");
                     ChatSession.agentConnectionId = connectionId;
+                    context.Clients.Client(connectionId).debug("test3");
                     ChatSession.helperConnectionId = "";
+                    context.Clients.Client(connectionId).debug("test4");
                     ChatSession.agentId = userId;
+                    context.Clients.Client(connectionId).debug("test5");
                     ChatSession.helperId = "";
+                    context.Clients.Client(connectionId).debug("test6");
                     ChatSession.lastActivity = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.requestDate = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     ChatSession.completeDate = "";
+                    context.Clients.Client(connectionId).debug("test7");
                     db.chatSessions.Add(ChatSession);
+                    context.Clients.Client(connectionId).debug("test8");
                     db.SaveChanges();
+                    context.Clients.Client(connectionId).debug("test9");
                     return false;
                 }
                 if (chatHelperRecord != null)

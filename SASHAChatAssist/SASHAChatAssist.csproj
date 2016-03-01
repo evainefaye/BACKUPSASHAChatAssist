@@ -131,6 +131,13 @@
     <Content Include="Scripts\jquery-2.2.0.min.map" />
     <None Include="Properties\PublishProfiles\Hawkbane.biz %28winhost%29.pubxml" />
     <None Include="Properties\PublishProfiles\USB Stick.pubxml" />
+    <EntityDeploy Include="tsc_tools.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>tsc_tools.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="tsc_tools.edmx.diagram">
+      <DependentUpon>tsc_tools.edmx</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -169,13 +176,6 @@
       <LastGenOutput>tsc_tools.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
-    <EntityDeploy Include="tsc_tools.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>tsc_tools.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="tsc_tools.edmx.diagram">
-      <DependentUpon>tsc_tools.edmx</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="chatHelper.cs">

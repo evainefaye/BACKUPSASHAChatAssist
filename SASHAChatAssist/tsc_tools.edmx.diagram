@@ -4,16 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="29e4c0cd04a9403ab00f70742452227c" Name="Diagram1">
+      <Diagram DiagramId="67375dbf32ae4276ac49b38cd83c59d1" Name="Diagram1">
         <EntityTypeShape EntityType="DB_89250_signalrchatModel.chatHelper" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_89250_signalrchatModel.chatLog" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_89250_signalrchatModel.chatSession" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_89250_signalrchatModel.sashaSession" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_89250_signalrchatModel.user" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_89250_signalrchatModel.sashaSession" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_89250_signalrchatModel.user" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatHelpers_users" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatSessions_users" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatSessions_users1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_sashaSessions_users" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DB_89250_signalrchatModel.chatLog" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

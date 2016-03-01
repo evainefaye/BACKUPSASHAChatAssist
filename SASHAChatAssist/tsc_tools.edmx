@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="chatHelpers">
           <Key>
             <PropertyRef Name="userId" />
@@ -33,12 +33,12 @@
           <Property Name="chatGUID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="sashaSessionId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="agentConnectionId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="helperConnectionId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="helperConnectionId" Type="nvarchar" MaxLength="50" />
           <Property Name="agentId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="helperId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="helperId" Type="nvarchar" MaxLength="50" />
           <Property Name="lastActivity" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="requestDate" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="completeDate" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="completeDate" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <EntityType Name="sashaSessions">
           <Key>
@@ -82,7 +82,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_chatSessions_users1">
-          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
           <End Role="chatSessions" Type="Self.chatSessions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="users">
@@ -128,7 +128,8 @@
             <End Role="sashaSessions" EntitySet="sashaSessions" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_89250_signalrchatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -138,11 +139,21 @@
           </Key>
           <Property Name="userId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="onlineStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="connectionId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="connectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="lastChatTime" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="currentChats" Type="Int32" Nullable="false" />
           <Property Name="maximumChats" Type="Int32" Nullable="false" />
           <NavigationProperty Name="user" Relationship="Self.FK_chatHelpers_users" FromRole="chatHelpers" ToRole="users" />
+        </EntityType>
+        <EntityType Name="chatLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="chatId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="time" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="chatSession">
           <Key>
@@ -151,14 +162,14 @@
           <Property Name="chatGUID" Type="Guid" Nullable="false" />
           <Property Name="sashaSessionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="agentConnectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="helperConnectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="helperConnectionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="agentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="helperId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="helperId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="lastActivity" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="requestDate" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="completeDate" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="user" Relationship="Self.FK_chatSessions_users" FromRole="chatSessions" ToRole="users" />
           <NavigationProperty Name="user1" Relationship="Self.FK_chatSessions_users1" FromRole="chatSessions" ToRole="users" />
-          <Property Name="completeDate" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="sashaSession">
           <Key>
@@ -207,7 +218,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_chatSessions_users1">
-          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
           <End Role="chatSessions" Type="Self.chatSession" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="users">
@@ -232,6 +243,7 @@
         </Association>
         <EntityContainer Name="tsc_tools" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="chatHelpers" EntityType="Self.chatHelper" />
+          <EntitySet Name="chatLogs" EntityType="Self.chatLog" />
           <EntitySet Name="chatSessions" EntityType="Self.chatSession" />
           <EntitySet Name="sashaSessions" EntityType="Self.sashaSession" />
           <EntitySet Name="users" EntityType="Self.user" />
@@ -251,18 +263,7 @@
             <End Role="users" EntitySet="users" />
             <End Role="sashaSessions" EntitySet="sashaSessions" />
           </AssociationSet>
-          <EntitySet Name="chatLogs" EntityType="DB_89250_signalrchatModel.chatLog" />
         </EntityContainer>
-        <EntityType Name="chatLog">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Guid" Nullable="false" />
-          <Property Name="chatId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="time" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -272,12 +273,23 @@
           <EntitySetMapping Name="chatHelpers">
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatHelper">
               <MappingFragment StoreEntitySet="chatHelpers">
-                <ScalarProperty Name="connectionId" ColumnName="connectionId" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="onlineStatus" ColumnName="onlineStatus" />
+                <ScalarProperty Name="connectionId" ColumnName="connectionId" />
                 <ScalarProperty Name="lastChatTime" ColumnName="lastChatTime" />
                 <ScalarProperty Name="currentChats" ColumnName="currentChats" />
                 <ScalarProperty Name="maximumChats" ColumnName="maximumChats" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chatLogs">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatLog">
+              <MappingFragment StoreEntitySet="chatLogs">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="chatId" ColumnName="chatId" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="message" ColumnName="message" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -285,7 +297,6 @@
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatSession">
               <MappingFragment StoreEntitySet="chatSessions">
                 <ScalarProperty Name="chatGUID" ColumnName="chatGUID" />
-                <ScalarProperty Name="completeDate" ColumnName="completeDate" />
                 <ScalarProperty Name="sashaSessionId" ColumnName="sashaSessionId" />
                 <ScalarProperty Name="agentConnectionId" ColumnName="agentConnectionId" />
                 <ScalarProperty Name="helperConnectionId" ColumnName="helperConnectionId" />
@@ -293,6 +304,7 @@
                 <ScalarProperty Name="helperId" ColumnName="helperId" />
                 <ScalarProperty Name="lastActivity" ColumnName="lastActivity" />
                 <ScalarProperty Name="requestDate" ColumnName="requestDate" />
+                <ScalarProperty Name="completeDate" ColumnName="completeDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -312,17 +324,6 @@
               <MappingFragment StoreEntitySet="users">
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="userName" ColumnName="userName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="chatLogs">
-            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatLog">
-              <MappingFragment StoreEntitySet="chatLogs">
-                <ScalarProperty Name="message" ColumnName="message" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="time" ColumnName="time" />
-                <ScalarProperty Name="chatId" ColumnName="chatId" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

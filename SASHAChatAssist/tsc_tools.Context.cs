@@ -26,9 +26,9 @@ namespace SASHAChatAssist
         }
     
         public virtual DbSet<chatHelper> chatHelpers { get; set; }
+        public virtual DbSet<chatLog> chatLogs { get; set; }
         public virtual DbSet<chatSession> chatSessions { get; set; }
         public virtual DbSet<sashaSession> sashaSessions { get; set; }
         public virtual DbSet<user> users { get; set; }
-        public virtual DbSet<chatLog> chatLogs { get; set; }
     }
 }

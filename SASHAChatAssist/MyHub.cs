@@ -80,14 +80,14 @@ namespace SASHAChatAssist
             /* No chatHelper record exists, display an error */
             if (chatHelper == "noRecord")
             {
-                Clients.Caller.throwError("User Not Found","<p>No user record for ATTUID: '<b>" + userId + "</b>' found.</p><p>Unable to connect as a chatHelper at this time.</p>");
+                Clients.Caller.throwMessage("User Not Found","<p>No user record for ATTUID: '<b>" + userId + "</b>' found.</p><p>Unable to connect as a chatHelper at this time.</p>", true);
                 return;
             }
 
             /* User shows connected in chatHelper, display an error */
             if (chatHelper == "existingConnection")
             {
-                Clients.Caller.throwError("User Already Connected","<p>ATTUID: '<b>" + userId + "</b>' has an existing connection.</p><p>Please try again in a few minutes.</p>");
+                Clients.Caller.throwMessage("User Already Connected","<p>ATTUID: '<b>" + userId + "</b>' has an existing connection.</p><p>Please try again in a few minutes.</p>", true);
                 return;
             }
 
@@ -220,7 +220,7 @@ namespace SASHAChatAssist
         {
             Clients.All.debug(connectionId);
             Clients.All.debug(dictionaryName);
-            Clients.Client(connectionId).throwError("Dictionary Saved", "Dictionary has been saved with the name of " + dictionaryName);
+            Clients.Client(connectionId).throwMessage("Dictionary Saved", "Dictionary has been saved with the name of " + dictionaryName, false);
         }
     }
 }

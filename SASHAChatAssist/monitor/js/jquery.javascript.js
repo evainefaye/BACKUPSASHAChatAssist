@@ -5,8 +5,10 @@
     /* **** START CLIENT HUB FUNCTIONS **** */
 
 	/* Will generate an error message dialog box with the given title and message. Disconnects from the server. */
-	chat.client.throwError = function (title, message) {
-		$.connection.hub.stop();
+	chat.client.throwMessage = function (title, message, stopConnection) {
+	    if (stopConnection) {
+	        $.connection.hub.stop();
+	    }
 		$("<div title='" + title + "'>" + message + "</div>").dialog({
 			modal: true,
 			buttons: {
@@ -134,7 +136,7 @@
 	    // Add the message to the page.
 		$("div#" + chatId ).find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
 		$("div.container").scrollTop($("div.container")[0].scrollHeight - $("div.container")[0].clientHeight);
-		if ($("#chatTabs ul li.ui-state-active").attr("chatid") != chatId) {
+		if ($("#chatTabs ul li.ui-state-active").attr("chatId") != chatId) {
 		    $("#chatTabs .ui-tabs-nav a[href='#" + chatId + "']").addClass("pendingMessage");
 		}
 	};
