@@ -21,8 +21,8 @@
 			smpSessionId=smpSessionId.replace(/:/g,"");
 			smpSessionId=smpSessionId.replace(/\\//g,"");
 			info = wf.getStepInfo();
-			flowName = wf.flowName;
-			stepName = wf.stepName;
+			flowName = info.flowName;
+			stepName = info.stepName;
 			chat.server.sashaInitiateChat(smpSessionId, flowName, stepName);
 		}
 
