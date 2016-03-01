@@ -19,8 +19,11 @@
 		function requestChatFromSASHA () {
 			smpSessionId = "'}#{smpSessionId}#{'";
 			smpSessionId=smpSessionId.replace(/:/g,"");
-			smpSessionId=smpSessionId.replace(/\\//g,"");			
-			chat.server.sashaInitiateChat(smpSessionId);
+			smpSessionId=smpSessionId.replace(/\\//g,"");
+			info = wf.getStepInfo();
+			flowName = wf.flowName;
+			stepName = wf.stepName;
+			chat.server.sashaInitiateChat(smpSessionId, flowName, stepName);
 		}
 
 		function openChatWindow () {

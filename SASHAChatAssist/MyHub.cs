@@ -154,7 +154,7 @@ namespace SASHAChatAssist
         }
 
 
-        public void SashaInitiateChat(string smpSessionId)
+        public void SashaInitiateChat(string smpSessionId, string flowName, string stepName)
         {
             /* User Id of agent requesting Chat */
             string userId = Clients.Caller.userId;
@@ -162,7 +162,7 @@ namespace SASHAChatAssist
             string userName = Clients.Caller.userName;
             /* ConnectionId of session requesting chat */
             string connectionId = Context.ConnectionId;
-            var d = Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId);
+            var d = Database.GetAvailableHelper(smpSessionId, userId, userName, connectionId, flowName, stepName);
             Clients.Caller.openChatWindow();
         }
 

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="chatHelpers">
           <Key>
             <PropertyRef Name="userId" />
@@ -39,6 +39,8 @@
           <Property Name="lastActivity" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="requestDate" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="completeDate" Type="nvarchar" MaxLength="40" />
+          <Property Name="flowName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="stepName" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="sashaSessions">
           <Key>
@@ -128,8 +130,7 @@
             <End Role="sashaSessions" EntitySet="sashaSessions" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DB_89250_signalrchatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -170,6 +171,8 @@
           <Property Name="completeDate" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="user" Relationship="Self.FK_chatSessions_users" FromRole="chatSessions" ToRole="users" />
           <NavigationProperty Name="user1" Relationship="Self.FK_chatSessions_users1" FromRole="chatSessions" ToRole="users" />
+          <Property Name="flowName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="stepName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="sashaSession">
           <Key>
@@ -296,6 +299,8 @@
           <EntitySetMapping Name="chatSessions">
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatSession">
               <MappingFragment StoreEntitySet="chatSessions">
+                <ScalarProperty Name="stepName" ColumnName="stepName" />
+                <ScalarProperty Name="flowName" ColumnName="flowName" />
                 <ScalarProperty Name="chatGUID" ColumnName="chatGUID" />
                 <ScalarProperty Name="sashaSessionId" ColumnName="sashaSessionId" />
                 <ScalarProperty Name="agentConnectionId" ColumnName="agentConnectionId" />

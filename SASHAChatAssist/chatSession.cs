@@ -23,6 +23,8 @@ namespace SASHAChatAssist
         public string lastActivity { get; set; }
         public string requestDate { get; set; }
         public string completeDate { get; set; }
+        public string flowName { get; set; }
+        public string stepName { get; set; }
     
         public virtual user user { get; set; }
         public virtual user user1 { get; set; }
