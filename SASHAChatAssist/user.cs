@@ -20,6 +20,7 @@ namespace SASHAChatAssist
             this.chatSessions = new HashSet<chatSession>();
             this.chatSessions1 = new HashSet<chatSession>();
             this.sashaSessions = new HashSet<sashaSession>();
+            this.annoucements = new HashSet<annoucement>();
         }
     
         public string userId { get; set; }
@@ -32,5 +33,7 @@ namespace SASHAChatAssist
         public virtual ICollection<chatSession> chatSessions1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<sashaSession> sashaSessions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<annoucement> annoucements { get; set; }
     }
 }

@@ -62,7 +62,7 @@
 						});
 					};
 
-					/* Will generate an error message dialog box with the given title and message. Disconnects from the server. */
+					/* Will generate an error message dialog box with the given title and message. Optionally Disconnects from the server. */
 					chat.client.throwMessage = function (title, message, stopConnection) {
 						if (stopConnection) {
 							$.connection.hub.stop();
@@ -75,6 +75,12 @@
 								}
 							}
 						});
+					};
+
+
+					/* Displays a list of unseen announcements */
+					chat.client.showUnseenAnnouncement = function (announcements) {
+						console.log("announcements");
 					};
 
 					/* Function to open chat window within sasha */

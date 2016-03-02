@@ -242,7 +242,7 @@ namespace SASHAChatAssist
                     /* No Online Chat Helpers */
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
                     var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
-                    context.Clients.Client(connectionId).throwMessage("Notice","There are currently no chat helpers online.", false);
+                    context.Clients.Client(connectionId).throwMessage("Notice", "There are currently no chat helpers online.", false);
                     context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "There are currently no chat helpers online.");
                     chatSession ChatSession = new chatSession();
                     ChatSession.chatGUID = Guid.NewGuid();
@@ -270,7 +270,7 @@ namespace SASHAChatAssist
                     /* Helpers online but all at maximum sessions */
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
                     var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
-                    context.Clients.Client(connectionId).throwMessage("Notice", "All available chat helpers are busy.",false);
+                    context.Clients.Client(connectionId).throwMessage("Notice", "All available chat helpers are busy.", false);
                     context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, "SYSTEM", "All chat helpers are busy.");
                     chatSession ChatSession = new chatSession();
                     ChatSession.chatGUID = Guid.NewGuid();
@@ -296,7 +296,7 @@ namespace SASHAChatAssist
                     /* Helper Found */
                     var time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
-                    context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, chatHelperName,"Hello " + userName + " how may I assist you?");
+                    context.Clients.Client(connectionId).broadcastMessage(smpSessionId, time, chatHelperName, "Hello " + userName + " how may I assist you?");
                     returnInfo.Add("Available", "True");
                     returnInfo.Add("chatHelperId", chatHelperId);
                     returnInfo.Add("chatHelperName", chatHelperName);
@@ -340,6 +340,25 @@ namespace SASHAChatAssist
                 }
                 db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
                 db.SaveChanges();
+            }
+        }
+
+        /* Returns a table of unseen announcements */
+        public static string checkAnnouncements(string userId)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                annoucement announcement = new annoucement();
+                var unseenAnnouncements = db.annoucements.OrderByDescending(a => a.enteredDate).Where(a => !a.seenBy.Contains("|" + userId + "|")).Select(a => new { a.enteredDate, a.user.userName, a.announcementText });
+                var json = JsonConvert.SerializeObject(unseenAnnouncements);
+                foreach (var announcementRecord in db.annoucements.Where(a => !a.seenBy.Contains("|" + userId + "|")).ToList())
+                {
+                    string seenBy = announcementRecord.seenBy;
+                    announcementRecord.seenBy = seenBy + "|" + userId + "|";
+                    db.Entry(announcementRecord).CurrentValues.SetValues(announcementRecord);
+                    db.SaveChanges();
+                }
+                return json;
             }
         }
     }

@@ -15,7 +15,11 @@ namespace SASHAChatAssist
     public partial class annoucement
     {
         public System.Guid announcementId { get; set; }
-        public string announcement { get; set; }
+        public string enteredDate { get; set; }
+        public string enteredBy { get; set; }
+        public string announcementText { get; set; }
         public string seenBy { get; set; }
+    
+        public virtual user user { get; set; }
     }
 }

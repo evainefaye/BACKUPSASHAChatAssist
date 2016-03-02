@@ -42,6 +42,13 @@ namespace SASHAChatAssist
             Clients.Group(groupNames.Monitor).broadcastMessage(groupNames.Monitor, time, "BROADCAST MESSAGE", announcement);
         }
 
+        /* Check Database for any unseen announcements */
+        public void CheckAnnouncements(string userId)
+        {
+            string announcements = Database.checkAnnouncements(userId);
+            Clients.Caller.showUnseenAnnouncement(announcements);
+        }
+
         /* ***** MONITOR SPECIFIC FUNCTIONS ***** */
 
         /* Returns True if the user is authenticated, false if not */
@@ -150,6 +157,7 @@ namespace SASHAChatAssist
                 Groups.Add(connectionId, groupNames.Sasha);
                 Groups.Add(connectionId, smpSessionId);
                 Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime, "");
+                CheckAnnouncements(userId);
             }
         }
 

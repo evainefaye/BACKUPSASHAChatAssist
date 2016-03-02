@@ -10,7 +10,9 @@
             <PropertyRef Name="announcementId" />
           </Key>
           <Property Name="announcementId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="announcement" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="enteredDate" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="enteredBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="announcementText" Type="nvarchar(max)" Nullable="false" />
           <Property Name="seenBy" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="chatHelpers">
@@ -67,6 +69,18 @@
           <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="userName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <Association Name="FK_annoucements_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="annoucements" Type="Self.annoucements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="annoucements">
+              <PropertyRef Name="enteredBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_chatHelpers_users">
           <End Role="users" Type="Self.users" Multiplicity="1" />
           <End Role="chatHelpers" Type="Self.chatHelpers" Multiplicity="0..1" />
@@ -122,6 +136,10 @@
           <EntitySet Name="chatSessions" EntityType="Self.chatSessions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sashaSessions" EntityType="Self.sashaSessions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_annoucements_users" Association="Self.FK_annoucements_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="annoucements" EntitySet="annoucements" />
+          </AssociationSet>
           <AssociationSet Name="FK_chatHelpers_users" Association="Self.FK_chatHelpers_users">
             <End Role="users" EntitySet="users" />
             <End Role="chatHelpers" EntitySet="chatHelpers" />
@@ -204,6 +222,7 @@
           <NavigationProperty Name="chatSessions" Relationship="Self.FK_chatSessions_users" FromRole="users" ToRole="chatSessions" />
           <NavigationProperty Name="chatSessions1" Relationship="Self.FK_chatSessions_users1" FromRole="users" ToRole="chatSessions" />
           <NavigationProperty Name="sashaSessions" Relationship="Self.FK_sashaSessions_users" FromRole="users" ToRole="sashaSessions" />
+          <NavigationProperty Name="annoucements" Relationship="DB_89250_signalrchatModel.FK_annoucements_users" FromRole="user" ToRole="annoucement" />
         </EntityType>
         <Association Name="FK_chatHelpers_users">
           <End Role="users" Type="Self.user" Multiplicity="1" />
@@ -276,16 +295,35 @@
             <End Role="sashaSessions" EntitySet="sashaSessions" />
           </AssociationSet>
           <EntitySet Name="annoucements" EntityType="DB_89250_signalrchatModel.annoucement" />
-        </EntityContainer>
+          <AssociationSet Name="FK_annoucements_users" Association="DB_89250_signalrchatModel.FK_annoucements_users">
+            <End Role="user" EntitySet="users" />
+            <End Role="annoucement" EntitySet="annoucements" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="annoucement">
           <Key>
             <PropertyRef Name="announcementId" />
           </Key>
           <Property Name="announcementId" Type="Guid" Nullable="false" />
-          <Property Name="announcement" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="enteredDate" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="enteredBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="announcementText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="seenBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="DB_89250_signalrchatModel.FK_annoucements_users" FromRole="annoucement" ToRole="user" />
         </EntityType>
-      </Schema>
+        <Association Name="FK_annoucements_users">
+          <End Type="DB_89250_signalrchatModel.user" Role="user" Multiplicity="1" />
+          <End Type="DB_89250_signalrchatModel.annoucement" Role="annoucement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="annoucement">
+              <PropertyRef Name="enteredBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -354,7 +392,9 @@
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.annoucement">
               <MappingFragment StoreEntitySet="annoucements">
                 <ScalarProperty Name="seenBy" ColumnName="seenBy" />
-                <ScalarProperty Name="announcement" ColumnName="announcement" />
+                <ScalarProperty Name="announcementText" ColumnName="announcementText" />
+                <ScalarProperty Name="enteredBy" ColumnName="enteredBy" />
+                <ScalarProperty Name="enteredDate" ColumnName="enteredDate" />
                 <ScalarProperty Name="announcementId" ColumnName="announcementId" />
               </MappingFragment>
             </EntityTypeMapping>

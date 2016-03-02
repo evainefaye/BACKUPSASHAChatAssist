@@ -14,8 +14,9 @@
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatSessions_users" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_chatSessions_users1" ManuallyRouted="false" />
         <AssociationConnector Association="DB_89250_signalrchatModel.FK_sashaSessions_users" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DB_89250_signalrchatModel.annoucement" Width="1.5" PointX="5.375" PointY="3.75" />
-      </Diagram>
+        <EntityTypeShape EntityType="DB_89250_signalrchatModel.annoucement" Width="1.5" PointX="3" PointY="11.875" />
+        <AssociationConnector Association="DB_89250_signalrchatModel.FK_annoucements_users" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
