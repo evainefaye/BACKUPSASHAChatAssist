@@ -194,15 +194,15 @@
 	    smpSessionId = smpSessionId.replace(/\//g, "");
 	    /* Only add a Tab for this chat if one does not already exist */
 	    if ($("li[chatId='" + smpSessionId + "']").length == 1) {
-	        time = new Date()
+	        local = new Date();
 	        time = ("00" + local.getHours()).substr(-2) + ":" + ("00" + local.getMinutes()).substr(-2) + ":" + ("00" + local.getSeconds()).substr(-2);
 	        var encodedTime = $("<div />").text(time).html();
 	        var encodedName = $("<div />").text("SYSTEM").html();
-	        var encodedName = $("<div />").text("CHAT REOPENED BY AGENT").html();
-	        $("div#" + chatId).find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
+	        var encodedMsg = $("<div />").text("CHAT REOPENED BY AGENT").html();
+	        $("div#" + smpSessionId).find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
 	        $("div.container").scrollTop($("div.container")[0].scrollHeight - $("div.container")[0].clientHeight);
-	        if ($("#chatTabs ul li.ui-state-active").attr("chatId") != chatId) {
-	            $("#chatTabs .ui-tabs-nav a[href='#" + chatId + "']").addClass("pendingMessage");
+	        if ($("#chatTabs ul li.ui-state-active").attr("chatId") != smpSessionId) {
+	            $("#chatTabs .ui-tabs-nav a[href='#" + smpSessionId + "']").addClass("pendingMessage");
 	        }
 	    }
 	    if ($("li[chatId='" + smpSessionId + "']").length == 0) {
