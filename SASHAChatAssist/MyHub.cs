@@ -34,6 +34,14 @@ namespace SASHAChatAssist
             Clients.Group(chatId).broadcastMessage(chatId, time, name, message);
         }
 
+        /* Broadcasts an annoucement from the Monitors */
+        public void BroadcastAnnouncement(string announcement)
+        {
+            Clients.Group(groupNames.Sasha).throwMessage("Announcement", announcement);
+            string time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
+            Clients.Group(groupNames.Monitor).broadcastMessage(groupNames.Monitor, time, "BROADCAST MESSAGE", announcement);
+        }
+
         /* ***** MONITOR SPECIFIC FUNCTIONS ***** */
 
         /* Returns True if the user is authenticated, false if not */

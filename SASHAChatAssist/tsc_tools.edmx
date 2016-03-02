@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DB_89250_signalrchatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="annoucements">
+          <Key>
+            <PropertyRef Name="announcementId" />
+          </Key>
+          <Property Name="announcementId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="announcement" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="seenBy" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="chatHelpers">
           <Key>
             <PropertyRef Name="userId" />
@@ -108,6 +116,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DB_89250_signalrchatModelStoreContainer">
+          <EntitySet Name="annoucements" EntityType="Self.annoucements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="chatHelpers" EntityType="Self.chatHelpers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="chatLogs" EntityType="Self.chatLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="chatSessions" EntityType="Self.chatSessions" Schema="dbo" store:Type="Tables" />
@@ -266,7 +275,16 @@
             <End Role="users" EntitySet="users" />
             <End Role="sashaSessions" EntitySet="sashaSessions" />
           </AssociationSet>
+          <EntitySet Name="annoucements" EntityType="DB_89250_signalrchatModel.annoucement" />
         </EntityContainer>
+        <EntityType Name="annoucement">
+          <Key>
+            <PropertyRef Name="announcementId" />
+          </Key>
+          <Property Name="announcementId" Type="Guid" Nullable="false" />
+          <Property Name="announcement" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="seenBy" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -329,6 +347,15 @@
               <MappingFragment StoreEntitySet="users">
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="userName" ColumnName="userName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="annoucements">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.annoucement">
+              <MappingFragment StoreEntitySet="annoucements">
+                <ScalarProperty Name="seenBy" ColumnName="seenBy" />
+                <ScalarProperty Name="announcement" ColumnName="announcement" />
+                <ScalarProperty Name="announcementId" ColumnName="announcementId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

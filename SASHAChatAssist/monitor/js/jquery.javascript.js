@@ -44,6 +44,12 @@
 		$("div#userName").html(userName);
 	};
 
+    /* Sends an announcement to the server for broadcast to all connected clients */
+	chat.client.sendAnnouncement = function (announcement) {
+	    announcement = announcement.replace(/\r\n|\r|\n/g, "<br />");
+	    chat.server.broadcastAnnouncement(announcement);
+	};
+
 	/* Adds an entry to the registeredSashaSessions Table for a newly connected Sasha Client */
 	chat.client.addSashaSession = function (connectionId, userId, userName, sessionStartTime, milestone) {
 		if ($("table#registeredSashaSessions tr#" + connectionId).length == 0 && sessionStartTime != "") {
@@ -206,6 +212,13 @@
 	        } else {
 	            $(this).prop("value", "Make Available For Chat");
 	            chat.server.toggleHelperStatus("Offline")
+	        }
+	    });
+	    /* Setup Sending Announcements to connected users */
+	    $("input#sendAnnouncement").off("click.sendAnnouncement").on("click.sendAnnouncement", function () {
+	        message = $("textarea#announcement").val().trim();
+	        if (message.length > 0) {
+	            chat.server.broadcastAnnouncement(message);
 	        }
 	    });
 

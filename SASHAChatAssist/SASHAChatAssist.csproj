@@ -178,6 +178,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="annoucement.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
     <Compile Include="chatHelper.cs">
       <DependentUpon>tsc_tools.tt</DependentUpon>
     </Compile>

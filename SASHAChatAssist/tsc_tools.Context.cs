@@ -30,5 +30,6 @@ namespace SASHAChatAssist
         public virtual DbSet<chatSession> chatSessions { get; set; }
         public virtual DbSet<sashaSession> sashaSessions { get; set; }
         public virtual DbSet<user> users { get; set; }
+        public virtual DbSet<annoucement> annoucements { get; set; }
     }
 }
