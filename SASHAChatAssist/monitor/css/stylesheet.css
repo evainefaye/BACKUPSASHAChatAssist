@@ -121,8 +121,8 @@ input.message {
 
 div.table-wrapper {
 	margin: auto;
-	width: 500px;
-	max-height: 300px;
+	width: 90%;
+	/* max-height: 300px; */
 	overflow: auto;
 }
 

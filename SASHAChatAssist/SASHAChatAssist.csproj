@@ -123,6 +123,7 @@
     <Content Include="sasha\js\SlideChatJavaScript.js" />
     <Content Include="sasha\js\UpdateMonitor.js" />
     <Content Include="sasha\ScriptNodes\AddSignalR.txt" />
+    <Content Include="sasha\ScriptNodes\addSignalRCSS.txt" />
     <Content Include="sasha\ScriptNodes\AttachMonitor.txt" />
     <Content Include="sasha\ScriptNodes\RequestDictionaryValues.txt" />
     <Content Include="sasha\ScriptNodes\SlideChatCSS.txt" />
