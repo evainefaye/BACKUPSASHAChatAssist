@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
 
+    $("#sessionTabs").tabs();
+
 	chat = $.connection.myHub;
 
     /* **** START CLIENT HUB FUNCTIONS **** */
@@ -52,7 +54,16 @@
 
 	/* Adds an entry to the registeredSashaSessions Table for a newly connected Sasha Client */
 	chat.client.addSashaSession = function (connectionId, userId, userName, sessionStartTime, milestone) {
-		if ($("table#registeredSashaSessions tr#" + connectionId).length == 0 && sessionStartTime != "") {
+        /* Add pending session if not already present */
+	    if ($("table#inactiveSashaSessions tr#" + connectionId.length == 0 && sessionStartTime == "")) {
+	        $("table#inactiveSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td></tr>");
+	        sortTable("inactiveSashaSessions");
+	    }
+        /* Add started session if not already present */
+	    if ($("table#registeredSashaSessions tr#" + connectionId).length == 0 && sessionStartTime != "") {
+	        /* Remove entry on the inactiveSashaSessions Table (if present) */
+	        $("table#inactiveSashaSessions tr#" + connectionId).remove();
+            /* Begin creating registeredSashaSessions table entry */
 			time = formatTime(sessionStartTime);
 			$("table#registeredSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td><td class='center'>" + localTime + "</td><td class=sessionDuration><span class='session' id=timerAge_" + connectionId + "></span></td><td class='stepName milestone'>Populated on Agent's Next Action</td><td class='stepDuration lastAgentActivityTime'><span class='step' id=lastActivityTime_" + connectionId + ">Populated on Agent's Next Action</span></td></tr>");
 			time = new Date(sessionStartTime);
@@ -70,7 +81,7 @@
 				format: 'yowdhMS',
 				onTick: checkSessionTime
 			});
-			sortTable();
+			sortTable("registeredSashaSessions");
 			$('#registeredSashaSessions tbody tr').on('click', function () {
 				$(this).find('td input:radio').prop('checked', true);
 				$('.selectedRow').removeClass('selectedRow');
@@ -93,7 +104,14 @@
 	/* Receives a JSON object of the sashaSessions Database and adds it to the registeredSashaSessions table */
 	chat.client.receiveSashaSessionRecords = function (sashaSessionRecords) {
 	    $.each($.parseJSON(sashaSessionRecords), function (idx, sashaSession) {
-	        /* Skip record if sessionStartTime is not set */
+	        /* Add to pending sessions if sessionStartTime is not set */
+	        if (sashaSession.sessionStartTime == "") {
+	            connectionId = sashaSession.connectionId;
+	            userId = sashaSession.userId;
+	            userName = sashaSession.userName;
+	            $("table#inactiveSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td></tr>");
+	            sortTable("inactiveSashaSessions");
+	        }
 	        if (sashaSession.sessionStartTime != "") {
 	            connectionId = sashaSession.connectionId;
 	            userId = sashaSession.userId;
@@ -127,7 +145,7 @@
 	                    $('button#requestData').click();
 	                });
 	            }
-	            sortTable();
+	            sortTable("registeredSashaSessions");
 	        }
 	    });
 	};
@@ -292,8 +310,8 @@ checkStepTime = function (periods) {
 };
 
 /* Sorts the table */
-sortTable = function () {
-	var rows = $("#registeredSashaClients tbody  tr").get();
+sortTable = function (tableName) {
+	var rows = $("#" + tableName + " tbody  tr").get();
 	rows.sort(function (a, b) {
 		var A = $(a).children("td").eq(1).text().toUpperCase();
 		var B = $(b).children("td").eq(1).text().toUpperCase();
@@ -306,7 +324,7 @@ sortTable = function () {
 		return 0;
 	});
 	$.each(rows, function (index, row) {
-		$("#registeredSashaClients").children("tbody").append(row);
+		$("#" + tableName).children("tbody").append(row);
 	});
 };
 

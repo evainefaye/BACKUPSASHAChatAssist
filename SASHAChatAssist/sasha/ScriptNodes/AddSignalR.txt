@@ -89,7 +89,7 @@
 						for (var i=0; i <= obj.length-1;i++) {
 							item = obj[i];
 							enteredDate = formatDateTime(item.enteredDate);
-							announce = announce + "<tr><td>" + enteredDate + "</td><td>" + item.userName + "</td><td>" + item.announcementText + "</td></tr>";
+							announce = announce + "<tr><td class=date>" + enteredDate + "</td><td class=user>" + item.userName + "</td><td class=text>" + item.announcementText + "</td></tr>";
 						}
 						announce = announce + "</tbody></table>";
 						$("<div title=\'IMPORTANT ANNOUNCEMENT(S)\'>Please make note of the following important announcement(s)<br />" + announce + "</div>").dialog({

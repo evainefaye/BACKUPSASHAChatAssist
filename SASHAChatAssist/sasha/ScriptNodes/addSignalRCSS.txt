@@ -1,7 +1,7 @@
 ﻿#{'
 	<script>
 		$(document).ready(function() {
-		    $("head").append("<style>table.announcements {border: solid 1px #000;border-collapse: collapse; width: 100%;}table.announcements td {border: solid 1px #000;}</style>");
+		    $("head").append("<style>table.announcements {border: solid 1px #000;border-collapse: collapse; width: 100%;}table.announcements td {border: solid 1px #000;}table.announcements td.date{width: 20%;text-align: right;vertical-align: top;}table.announcements td.user{width: 20%;text-align: right;vertical-align: top;}table.announcements td.text{vertical-align: top;}</style>");
 		});
 	</script>
 '}

@@ -151,7 +151,6 @@ namespace SASHAChatAssist
             Clients.Caller.smpSessionId = smpSessionId;
             Groups.Add(connectionId, smpSessionId);
             string sessionStartTime = "";
-          //  sessionStartTime = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
             if (Database.AddSashaSessionRecord(connectionId, userId, smpSessionId, sessionStartTime, ""))
             {
                 Groups.Add(connectionId, groupNames.Sasha);

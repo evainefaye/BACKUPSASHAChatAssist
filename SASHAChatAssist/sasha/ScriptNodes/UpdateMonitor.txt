@@ -2,13 +2,13 @@
 	<script>
 		$(document).ready(function() {
 			stepInfo = wf.getStepInfo();
-			FlowName = stepInfo.flowName;
+			flowName = stepInfo.flowName;
 			stepName = stepInfo.stepName;
 			try {
 				getDictionaryValues(["wf.lastAgentActivityTime"]);
 				values = $.parseJSON(json);
 				lastAgentActivityTime = values["wf.lastAgentActivityTime"];
-				chat.server.updateMonitor(flowname + "<br />" + stepName, lastAgentActivityTime);
+				chat.server.updateMonitor(flowName + "<br />" + stepName, lastAgentActivityTime);
 			}
 			catch(err) {
 			}
