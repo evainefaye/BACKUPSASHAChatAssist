@@ -69,6 +69,7 @@
 						}
 						$("<div title=\'" + title + "\'>" + message + "</div>").dialog({
 							modal: true,
+							width: $(window).width()-200,
 							buttons: {
 								Ok: function () {
 									$(this).dialog("close");
@@ -83,7 +84,7 @@
 						if (announcements == "[]") {
 							return;
 						}
-						announce = "<table><tbody>";
+						announce = "<table class=announcements><tbody>";
 						var obj = $.parseJSON(announcements);
 						for (var i=0; i < obj.length-1;i++) {
 							item = obj[i];
@@ -93,6 +94,7 @@
 						announce = announce + "</tbody></table>";
 						$("<div title=\'IMPORTANT ANNOUNCEMENT(S)\'>Please make note of the following important announcement(s)<br />" + announce + "</div>").dialog({
 							modal: true,
+							width: $(window).width()-200,
 							buttons: {
 								Ok: function () {
 									$(this).dialog("close");
