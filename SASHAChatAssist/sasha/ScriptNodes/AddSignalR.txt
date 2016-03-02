@@ -84,14 +84,21 @@
 							return;
 						}
 						announce = "<table><tbody>";
-						var obj = jquery.parseJSON(announcements);
+						var obj = $.parseJSON(announcements);
 						for (var i=0; i < obj.length-1;i++) {
 							item = obj[i];
 							enteredDate = formatDateTime(item.enteredDate);
-							announce = announce + "<tr><td>" + enteredDate + "</td><td>" + userName + "</td><td>" + announcementText + "</td></tr>";
+							announce = announce + "<tr><td>" + enteredDate + "</td><td>" + item.userName + "</td><td>" + item.announcementText + "</td></tr>";
 						}
 						announce = announce + "</tbody></table>";
-						console.log(announce);
+						$("<div title=\'IMPORTANT ANNOUNCEMENT(S)\'>Please make note of the following important announcement(s)<br />" + announce + "</div>").dialog({
+							modal: true,
+							buttons: {
+								Ok: function () {
+									$(this).dialog("close");
+								}
+							}
+						});
 					};
 
 					/* Function to open chat window within sasha */
@@ -137,7 +144,7 @@
 		/* Formats UTC Date and Time to LocalTime */
 		formatDateTime = function(UTCTime) {
 			local = new Date(UTCTime);
-			localTime = ("00" + local.getMonth()).substr(-2) + "/" + ("00" + local.getDate()).substr(-2) + "/" + local.getFullYear + " "  + ("00" + local.getHours()).substr(-2) + ":" + ("00" + local.getMinutes()).substr(-2) + ":" + ("00" + local.getSeconds()).substr(-2);
+			localTime = ("00" + local.getMonth()).substr(-2) + "/" + ("00" + local.getDate()).substr(-2) + "/" + local.getFullYear() + " "  + ("00" + local.getHours()).substr(-2) + ":" + ("00" + local.getMinutes()).substr(-2) + ":" + ("00" + local.getSeconds()).substr(-2);
 			return localTime;
 		};
 
