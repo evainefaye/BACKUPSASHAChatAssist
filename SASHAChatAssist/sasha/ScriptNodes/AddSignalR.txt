@@ -86,7 +86,7 @@
 						}
 						announce = "<table class=announcements><tbody>";
 						var obj = $.parseJSON(announcements);
-						for (var i=0; i < obj.length-1;i++) {
+						for (var i=0; i <= obj.length-1;i++) {
 							item = obj[i];
 							enteredDate = formatDateTime(item.enteredDate);
 							announce = announce + "<tr><td>" + enteredDate + "</td><td>" + item.userName + "</td><td>" + item.announcementText + "</td></tr>";
