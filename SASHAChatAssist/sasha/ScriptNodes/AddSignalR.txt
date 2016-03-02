@@ -84,7 +84,7 @@
 						if (announcements == "[]") {
 							return;
 						}
-						announce = "<table class=announcements><tbody>";
+						announce = "<table class=announcements><thead><tr><th>DATE</th><th>ENTERED BY</th><th>INFORMATION</th></tr></thead><tbody>";
 						var obj = $.parseJSON(announcements);
 						for (var i=0; i <= obj.length-1;i++) {
 							item = obj[i];
@@ -92,7 +92,7 @@
 							announce = announce + "<tr><td class=date>" + enteredDate + "</td><td class=user>" + item.userName + "</td><td class=text>" + item.announcementText + "</td></tr>";
 						}
 						announce = announce + "</tbody></table>";
-						$("<div title=\'IMPORTANT ANNOUNCEMENT(S)\'>Please make note of the following important announcement(s)<br />" + announce + "</div>").dialog({
+						$("<div title=\'IMPORTANT ANNOUNCEMENT(S)\'>Please make note of the following important announcement(s)<br /><br>" + announce + "</div>").dialog({
 							modal: true,
 							width: $(window).width()-200,
 							buttons: {
