@@ -318,7 +318,7 @@ namespace SASHAChatAssist
                     db.chatSessions.Add(ChatSession);
                     db.SaveChanges();
                     context.Groups.Add(chatHelperConnectionId, smpSessionId);
-                    context.Clients.Client(chatHelperConnectionId).addChatTab(smpSessionId, userName);
+                    context.Clients.Client(chatHelperConnectionId).addChatTab(smpSessionId, userName, "pull");
                 }
                 return true;
             }
@@ -359,6 +359,28 @@ namespace SASHAChatAssist
                     db.SaveChanges();
                 }
                 return json;
+            }
+        }
+
+        public static void getSMPSessionId(string connectionId, string requesterConnectionId, string requesterName)
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                sashaSession sashaSession = new sashaSession();
+                var sashaSessionRecord =
+                    (from s in db.sashaSessions
+                     where s.connectionId == connectionId
+                     select s
+                    ).FirstOrDefault();
+                if (sashaSessionRecord != null)
+                {
+                    string smpSessionId = sashaSessionRecord.smpSessionId;
+                    string userName = sashaSessionRecord.user.userName;
+                    var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                    context.Groups.Add(requesterConnectionId, smpSessionId);
+                    context.Clients.Client(requesterConnectionId).addChatTab(smpSessionId, userName, "push");
+                    context.Clients.Client(connectionId).requestChat(requesterName, requesterConnectionId);
+                }
             }
         }
     }

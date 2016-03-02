@@ -226,9 +226,9 @@ namespace SASHAChatAssist
         /* Remotely initiate a chat window to a SASHA user */
         public void RequestChat(string connectionId)
         {
-            string requesterId = Context.ConnectionId;
-            string name = Clients.Caller.userId;
-            Clients.Client(connectionId).requestChat(name, requesterId);
+            string requesterConnectionId = Context.ConnectionId;
+            string requesterName = Clients.Caller.userName;
+            Database.getSMPSessionId(connectionId, requesterConnectionId, requesterName);
         }
 
         public void NotifyDictionarySaved(string connectionId, string dictionaryName)

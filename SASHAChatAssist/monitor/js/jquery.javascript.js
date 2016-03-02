@@ -55,14 +55,21 @@
 	/* Adds an entry to the registeredSashaSessions Table for a newly connected Sasha Client */
 	chat.client.addSashaSession = function (connectionId, userId, userName, sessionStartTime, milestone) {
         /* Add pending session if not already present */
-	    if ($("table#inactiveSashaSessions tr#" + connectionId.length == 0 && sessionStartTime == "")) {
-	        $("table#inactiveSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td></tr>");
+	    if ($("table#inactiveSashaSessions tr#Inactive" + connectionId.length == 0 && sessionStartTime == "")) {
+	        $("table#inactiveSashaSessions tbody").append("<tr id='Inactive" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td></tr>");
 	        sortTable("inactiveSashaSessions");
+	        $('#inactiveSashaSessions tbody tr').on('click', function () {
+	            $(this).find('td input:radio').prop('checked', true);
+	            $('.selectedRow').removeClass('selectedRow');
+	            $(this).addClass('selectedRow');
+	            $('div#interactionPanel').show();
+	            $('button#requestData').click();
+	        });
 	    }
-        /* Add started session if not already present */
+        /* Add started session if not already present and has a start time*/
 	    if ($("table#registeredSashaSessions tr#" + connectionId).length == 0 && sessionStartTime != "") {
-	        /* Remove entry on the inactiveSashaSessions Table (if present) */
-	        $("table#inactiveSashaSessions tr#" + connectionId).remove();
+            /* Remove from Connections List */
+	        $("table#inactiveSashaSessions tr#Inactive" + connectionId).remove();
             /* Begin creating registeredSashaSessions table entry */
 			time = formatTime(sessionStartTime);
 			$("table#registeredSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td><td class='center'>" + localTime + "</td><td class=sessionDuration><span class='session' id=timerAge_" + connectionId + "></span></td><td class='stepName milestone'>Populated on Agent's Next Action</td><td class='stepDuration lastAgentActivityTime'><span class='step' id=lastActivityTime_" + connectionId + ">Populated on Agent's Next Action</span></td></tr>");
@@ -95,6 +102,10 @@
     // Remove Sasha Client
 	chat.client.removeSashaSession = function (connectionId) {
 	    $("span#timerAge_" + connectionId).countdown("destroy");
+	    $("table#inactiveSashaSessions tr#Inactive" + connectionId).hide();
+	    setTimeout(function () {
+	        $("table#inactiveSashaSessions tr#Inactive" + connectionId).remove();
+	    }, 500);
 	    $("table#registeredSashaSessions tr#" + connectionId).hide();
 	    setTimeout(function () {
 	        $("table#registeredSashaSessions tr#" + connectionId).remove();
@@ -109,8 +120,15 @@
 	            connectionId = sashaSession.connectionId;
 	            userId = sashaSession.userId;
 	            userName = sashaSession.userName;
-	            $("table#inactiveSashaSessions tbody").append("<tr id='" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td></tr>");
+	            $("table#inactiveSashaSessions tbody").append("<tr id='Inactive" + connectionId + "'><td class='hidden'><input type=radio name='connectionId' value='" + connectionId + "'></td><td>" + userName + "</td><td>" + userId + "</td></tr>");
 	            sortTable("inactiveSashaSessions");
+	            $('#inactiveSashaSessions tbody tr').on('click', function () {
+	                $(this).find('td input:radio').prop('checked', true);
+	                $('.selectedRow').removeClass('selectedRow');
+	                $(this).addClass('selectedRow');
+	                $('div#interactionPanel').show();
+	                $('button#requestData').click();
+	            });
 	        }
 	        if (sashaSession.sessionStartTime != "") {
 	            connectionId = sashaSession.connectionId;
@@ -171,17 +189,32 @@
 	};
 
 	/* Add a Chat Tab when needed */
-	chat.client.addChatTab = function (smpSessionId, userName) {
+	chat.client.addChatTab = function (smpSessionId, userName, type) {
 	    smpSessionId = smpSessionId.replace(/:/g, "");
 	    smpSessionId = smpSessionId.replace(/\//g, "");
-	    $("div#chatTabs > ul").append("<li chatId='" + smpSessionId + "'><a href='#" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
-		$("div#chatTabs").append("<div id='" + smpSessionId + "'><div class='container'><table class='chat'><tbody></tbody></table></div><input class='message' placeholder='ENTER YOUR MESSAGE HERE' type='text' /></div>");
-		$("div#chatTabs").tabs("refresh");
-        /* Highlight tab if it is not active and content has been added to it */
-		$("#chatTabs .ui-tabs-nav li").off("click.higlight").on("click.highlight", function () {
-		    $(this).find("a").removeClass("pendingMessage");
-		});
-		CRtoSend();
+	    /* Only add a Tab for this chat if one does not already exist */
+	    if ($("li[chatId='" + smpSessionId + "']").length == 1) {
+	        time = new Date()
+	        time = ("00" + local.getHours()).substr(-2) + ":" + ("00" + local.getMinutes()).substr(-2) + ":" + ("00" + local.getSeconds()).substr(-2);
+	        var encodedTime = $("<div />").text(time).html();
+	        var encodedName = $("<div />").text("SYSTEM").html();
+	        var encodedName = $("<div />").text("CHAT REOPENED BY AGENT").html();
+	        $("div#" + chatId).find("tbody").append("<tr><td class='time'>[" + encodedTime + "]</td><td><strong>" + encodedName + "</strong>:&nbsp;" + encodedMsg + "</td></tr>");
+	        $("div.container").scrollTop($("div.container")[0].scrollHeight - $("div.container")[0].clientHeight);
+	        if ($("#chatTabs ul li.ui-state-active").attr("chatId") != chatId) {
+	            $("#chatTabs .ui-tabs-nav a[href='#" + chatId + "']").addClass("pendingMessage");
+	        }
+	    }
+	    if ($("li[chatId='" + smpSessionId + "']").length == 0) {
+	        $("div#chatTabs > ul").append("<li chatId='" + smpSessionId + "'><a href='#" + smpSessionId + "'>" + userName + "</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>");
+	        $("div#chatTabs").append("<div id='" + smpSessionId + "'><div class='container'><table class='chat'><tbody></tbody></table></div><input class='message' placeholder='ENTER YOUR MESSAGE HERE' type='text' /></div>");
+	        $("div#chatTabs").tabs("refresh");
+	        /* Highlight tab if it is not active and content has been added to it */
+	        $("#chatTabs .ui-tabs-nav li").off("click.higlight").on("click.highlight", function () {
+	            $(this).find("a").removeClass("pendingMessage");
+	        });
+	        CRtoSend();
+	    }
 	};
 
     /* Receive requested SASHA Dictonary Data */
