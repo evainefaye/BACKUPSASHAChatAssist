@@ -80,7 +80,18 @@
 
 					/* Displays a list of unseen announcements */
 					chat.client.showUnseenAnnouncement = function (announcements) {
-						console.log("announcements");
+						if (announcements == "[]") {
+							return;
+						}
+						announce = "<table><tbody>";
+						var obj = jquery.parseJSON(announcements);
+						for (var i=0; i < obj.length-1;i++) {
+							item = obj[i];
+							enteredDate = formatDateTime(item.enteredDate);
+							announce = announce + "<tr><td>" + enteredDate + "</td><td>" + userName + "</td><td>" + announcementText + "</td></tr>";
+						}
+						announce = announce + "</tbody></table>";
+						console.log(announce);
 					};
 
 					/* Function to open chat window within sasha */
@@ -120,6 +131,13 @@
 		formatTime = function(UTCTime) {
 			local = new Date(UTCTime);
 			localTime = ("00" + local.getHours()).substr(-2) + ":" + ("00" + local.getMinutes()).substr(-2) + ":" + ("00" + local.getSeconds()).substr(-2);
+			return localTime;
+		};
+
+		/* Formats UTC Date and Time to LocalTime */
+		formatDateTime = function(UTCTime) {
+			local = new Date(UTCTime);
+			localTime = ("00" + local.getMonth()).substr(-2) + "/" + ("00" + local.getDate()).substr(-2) + "/" + local.getFullYear + " "  + ("00" + local.getHours()).substr(-2) + ":" + ("00" + local.getMinutes()).substr(-2) + ":" + ("00" + local.getSeconds()).substr(-2);
 			return localTime;
 		};
 
