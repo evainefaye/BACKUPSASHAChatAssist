@@ -20,6 +20,10 @@ namespace SASHAChatAssist
         public string lastChatTime { get; set; }
         public int currentChats { get; set; }
         public int maximumChats { get; set; }
+        public string broadcastAll { get; set; }
+        public string broadcast { get; set; }
+        public string pushChat { get; set; }
+        public string saveDictionary { get; set; }
     
         public virtual user user { get; set; }
     }

@@ -126,6 +126,7 @@
     <Content Include="SASHAScriptNodes\SlideChatJavaScript.txt" />
     <Content Include="SASHAScriptNodes\UpdateMonitor.txt" />
     <None Include="Properties\PublishProfiles\Hawkbane.biz %28winhost%29.pubxml" />
+    <None Include="Properties\PublishProfiles\Hawkbane.biz - Stage.pubxml" />
     <None Include="Properties\PublishProfiles\USB Stick.pubxml" />
     <EntityDeploy Include="tsc_tools.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -180,6 +181,9 @@
       <DependentUpon>tsc_tools.tt</DependentUpon>
     </Compile>
     <Compile Include="Database.cs" />
+    <Compile Include="locationLookup.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
     <Compile Include="MyHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="sashaSession.cs">

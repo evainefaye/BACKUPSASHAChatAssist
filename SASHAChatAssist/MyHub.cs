@@ -35,9 +35,19 @@ namespace SASHAChatAssist
         }
 
         /* Broadcasts an annoucement from the Monitors */
-        public void BroadcastAnnouncement(string announcement)
+        public void BroadcastAnnouncement(string announcement, string groupName)
         {
-            Clients.Group(groupNames.Sasha).throwMessage("Announcement", announcement);
+            string name = Clients.Caller.userName;
+            string id = Clients.Caller.userId;
+            name = name + "(" + id + "): ";
+            announcement = name + announcement;
+            if (groupName == "All")
+            {
+                Clients.Group(groupNames.Sasha).throwMessage("Announcement", announcement, false);
+            } else
+            {
+                Clients.Group(groupName).throwMessage("Announcement", announcement, false);
+            }
             string time = System.DateTime.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ssZ");
             Clients.Group(groupNames.Monitor).broadcastMessage(groupNames.Monitor, time, "BROADCAST MESSAGE", announcement);
         }
@@ -112,8 +122,11 @@ namespace SASHAChatAssist
             /* Add the connection to a group based on userId */
             Groups.Add(Context.ConnectionId, userId);
 
-            /* Update the userName div on the main page with the recovered userName */
-            Clients.Caller.displayUserName(userName);
+            /* Get Location Names From Location Codes */
+            string locationCodes = Database.GetLocationCodes();
+
+            /* Update the userName div on the main page with the recovered userName and send permissions */
+            Clients.Caller.updateDisplay(userName, chatHelper, locationCodes);
 
             /* Retrieve list of Sasha Sessions from the sashaSessions and push them to the newly connected monitor */
             string sashaSessionRecords = Database.GetSashaSessionRecords();
@@ -137,14 +150,18 @@ namespace SASHAChatAssist
         /* ***** SASHA SPECIFIC FUNCTIONS ***** */
 
         /* Add Initial Record to SASHA Sessions */
-        public void RegisterSashaSession(string userId, string agentName, string smpSessionId)
+        public void RegisterSashaSession(string userId, string agentName, string smpSessionId, string agentLocationCode)
         {
             string userid = userId.ToLower();
             string connectionId = Context.ConnectionId;
             string userName = Database.GetUserName(userId);
             if (userName == null)
             {
-                Database.AddUserRecord(userId.ToLower(), agentName.ToUpper());
+                Database.AddUserRecord(userId.ToLower(), agentName.ToUpper(), agentLocationCode.ToUpper());
+            }
+            if (agentLocationCode != "" && agentLocationCode != null)
+            {
+                Groups.Add(connectionId, agentLocationCode);
             }
             Clients.Caller.userId = userId.ToLower();
             Clients.Caller.userName = agentName.ToUpper();

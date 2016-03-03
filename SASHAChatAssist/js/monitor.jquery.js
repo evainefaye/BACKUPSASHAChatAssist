@@ -41,7 +41,23 @@
 	};
 
 	/* update div#userName with the userName of the user after Database Lookup */
-	chat.client.displayUserName = function (userName) {
+	chat.client.updateDisplay = function (userName, chatHelperPermissions, locationCodes) {
+	    permissions = $.parseJSON(chatHelperPermissions);
+	    if (permissions.pushChat != "Y") {
+	        $("button#requestChat").remove();
+	    }
+	    if (permissions.saveDictionary != "Y") {
+	        $("button#saveDictionary").remove();
+	    }
+	    if (permissions.broadcastAll != "Y" && permissions.broadcast != "Y") {
+	        $("div#divAnnouncement").remove();
+	    } else if (permissions.broadcastAll != "Y") {
+	        $("select#announceGroup option[value='All']").remove();
+	    }
+	    locations = $.parseJSON(locationCodes);
+	    $.each(locations, function (i, location) {
+	        $("select#announceGroup").append("<option val='" + location.locationCode + "'>" + location.locationName + "</option>");
+	    })
 	    $("div#wrapper").show();
 		$("div#userName").html(userName);
 	};
@@ -269,7 +285,13 @@
 	    $("input#sendAnnouncement").off("click.sendAnnouncement").on("click.sendAnnouncement", function () {
 	        message = $("textarea#announcement").val().trim();
 	        if (message.length > 0) {
-	            chat.server.broadcastAnnouncement(message);
+	            if ($("select#announceGroup :selected").val() == "") {
+	                $("select#announceGroup").addClass("errorBorder");
+	                return;
+	            }
+    	        $("select#announceGroup").removeClass("errorBorder");
+    	        chat.server.broadcastAnnouncement(message, $("select#announceGroup :selected").val());
+    	        $("textarea#announcement").val("");
 	        }
 	    });
 

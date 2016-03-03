@@ -80,8 +80,11 @@
                 </div>
             </div>
             <br />
-            <textarea id="announcement" rows=4 cols=60 placeholder="Enter an announcement that will be broadcast to all connected users here"></textarea>
-            <input type="button" id="sendAnnouncement" value="Send Announcement" />
+            <div id="divAnnouncement">
+                <textarea id="announcement" placeholder="Enter an announcement that will be broadcast to all connected users here"></textarea>
+                Select Location: <select id="announceGroup"><option value="">-- Select Group --</option><option value="All">All Connected SASHA Users</option></select>
+                <input type="button" id="sendAnnouncement" value="Send Announcement" />
+            </div>
             <br />
             <div class="CSSTableGenerator">
                 <table id="resultsTable">

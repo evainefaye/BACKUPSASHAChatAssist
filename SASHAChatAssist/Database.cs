@@ -84,7 +84,9 @@ namespace SASHAChatAssist
                         chatHelperRecord.connectionId = connectionId;
                         db.Entry(chatHelperRecord).CurrentValues.SetValues(chatHelperRecord);
                         db.SaveChanges();
-                        return "";
+                        db.Configuration.LazyLoadingEnabled = false;
+                        var Record = db.chatHelpers.Where(c => c.userId == userId).SingleOrDefault();
+                        return JsonConvert.SerializeObject(Record);
                     }
                 }
                 else
@@ -212,7 +214,7 @@ namespace SASHAChatAssist
         }
 
         /* Adds a user record to the users table if one does not exist already */
-        public static void AddUserRecord(string userId, string userName)
+        public static void AddUserRecord(string userId, string userName, string AgentLocationCode)
         {
             using (tsc_tools db = new tsc_tools())
             {
@@ -381,6 +383,20 @@ namespace SASHAChatAssist
                     context.Clients.Client(requesterConnectionId).addChatTab(smpSessionId, userName, "push");
                     context.Clients.Client(connectionId).requestChat(requesterName, requesterConnectionId);
                 }
+            }
+        }
+
+        /* Retrieves Location Codes and Location Names */
+        public static string GetLocationCodes()
+        {
+            using (tsc_tools db = new tsc_tools())
+            {
+                locationLookup locationCode = new locationLookup();
+                var locationLookupRecords =
+                    from l in db.locationLookups
+                    orderby l.locationName
+                    select l;
+                return JsonConvert.SerializeObject(locationLookupRecords);
             }
         }
     }

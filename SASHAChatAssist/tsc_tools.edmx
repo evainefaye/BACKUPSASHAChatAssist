@@ -25,6 +25,10 @@
           <Property Name="lastChatTime" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="currentChats" Type="int" Nullable="false" />
           <Property Name="maximumChats" Type="int" Nullable="false" />
+          <Property Name="broadcastAll" Type="nvarchar" MaxLength="1" />
+          <Property Name="broadcast" Type="nvarchar" MaxLength="1" />
+          <Property Name="pushChat" Type="nvarchar" MaxLength="1" />
+          <Property Name="saveDictionary" Type="nvarchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="chatLogs">
           <Key>
@@ -52,6 +56,13 @@
           <Property Name="flowName" Type="nvarchar(max)" />
           <Property Name="stepName" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="locationLookup">
+          <Key>
+            <PropertyRef Name="locationCode" />
+          </Key>
+          <Property Name="locationCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="locationName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="sashaSessions">
           <Key>
             <PropertyRef Name="connectionId" />
@@ -68,6 +79,7 @@
           </Key>
           <Property Name="userId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="userName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="locationCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_annoucements_users">
           <End Role="users" Type="Self.users" Multiplicity="1" />
@@ -134,6 +146,7 @@
           <EntitySet Name="chatHelpers" EntityType="Self.chatHelpers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="chatLogs" EntityType="Self.chatLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="chatSessions" EntityType="Self.chatSessions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="locationLookup" EntityType="Self.locationLookup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sashaSessions" EntityType="Self.sashaSessions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_annoucements_users" Association="Self.FK_annoucements_users">
@@ -172,6 +185,10 @@
           <Property Name="currentChats" Type="Int32" Nullable="false" />
           <Property Name="maximumChats" Type="Int32" Nullable="false" />
           <NavigationProperty Name="user" Relationship="Self.FK_chatHelpers_users" FromRole="chatHelpers" ToRole="users" />
+          <Property Name="broadcastAll" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="broadcast" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="pushChat" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="saveDictionary" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="chatLog">
           <Key>
@@ -223,6 +240,7 @@
           <NavigationProperty Name="chatSessions1" Relationship="Self.FK_chatSessions_users1" FromRole="users" ToRole="chatSessions" />
           <NavigationProperty Name="sashaSessions" Relationship="Self.FK_sashaSessions_users" FromRole="users" ToRole="sashaSessions" />
           <NavigationProperty Name="annoucements" Relationship="DB_89250_signalrchatModel.FK_annoucements_users" FromRole="user" ToRole="annoucement" />
+          <Property Name="locationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_chatHelpers_users">
           <End Role="users" Type="Self.user" Multiplicity="1" />
@@ -299,6 +317,7 @@
             <End Role="user" EntitySet="users" />
             <End Role="annoucement" EntitySet="annoucements" />
           </AssociationSet>
+          <EntitySet Name="locationLookups" EntityType="DB_89250_signalrchatModel.locationLookup" />
           </EntityContainer>
         <EntityType Name="annoucement">
           <Key>
@@ -323,6 +342,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="locationLookup">
+          <Key>
+            <PropertyRef Name="locationCode" />
+          </Key>
+          <Property Name="locationCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="locationName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -332,6 +358,10 @@
           <EntitySetMapping Name="chatHelpers">
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.chatHelper">
               <MappingFragment StoreEntitySet="chatHelpers">
+                <ScalarProperty Name="saveDictionary" ColumnName="saveDictionary" />
+                <ScalarProperty Name="pushChat" ColumnName="pushChat" />
+                <ScalarProperty Name="broadcast" ColumnName="broadcast" />
+                <ScalarProperty Name="broadcastAll" ColumnName="broadcastAll" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="onlineStatus" ColumnName="onlineStatus" />
                 <ScalarProperty Name="connectionId" ColumnName="connectionId" />
@@ -383,6 +413,7 @@
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="DB_89250_signalrchatModel.user">
               <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="locationCode" ColumnName="locationCode" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="userName" ColumnName="userName" />
               </MappingFragment>
@@ -396,6 +427,14 @@
                 <ScalarProperty Name="enteredBy" ColumnName="enteredBy" />
                 <ScalarProperty Name="enteredDate" ColumnName="enteredDate" />
                 <ScalarProperty Name="announcementId" ColumnName="announcementId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="locationLookups">
+            <EntityTypeMapping TypeName="DB_89250_signalrchatModel.locationLookup">
+              <MappingFragment StoreEntitySet="locationLookup">
+                <ScalarProperty Name="locationName" ColumnName="locationName" />
+                <ScalarProperty Name="locationCode" ColumnName="locationCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
