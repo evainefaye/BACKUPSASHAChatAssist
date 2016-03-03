@@ -130,7 +130,7 @@
 					smpSessionId = "'}#{smpSessionId}#{'";
 					smpSessionId=smpSessionId.replace(/:/g,"");
 					smpSessionId=smpSessionId.replace(/\\//g,"");
-					chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId,'"}#{AgentLocationCode}#{'");
+					chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId);
 					CRToSend();
 				});
 			}
