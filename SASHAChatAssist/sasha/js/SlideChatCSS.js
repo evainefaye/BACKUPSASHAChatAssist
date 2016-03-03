@@ -1,4 +1,0 @@
-
-		$(document).ready(function() {
-		    $("head").append("<style>#slideChat {z-index:9999;width:100%;height:160px;overflow-y:auto;overflow-x:hidden;position:absolute;background-color:#f4f4f4;display:none;}div#chatWindow {margin: 5px;overflow-y:auto;overflow-x:hidden;height:120px;max-height:120px;background-color:white;border:solid 1px black;}input.message {width: 100%;}div.closeChat{cursor:default;float:right;font-size:160%;font-weight:bold;}table.chat {border-collapse: collapse}table td.time {vertical-align: top;padding-right: 3px;border-right: solid 1px #000;}</style>");
-		});

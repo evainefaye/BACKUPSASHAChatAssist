@@ -117,18 +117,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="sasha\js\AttachMonitor.js" />
-    <Content Include="sasha\js\RequestDictionaryValues.js" />
-    <Content Include="sasha\js\SlideChatCSS.js" />
-    <Content Include="sasha\js\SlideChatJavaScript.js" />
-    <Content Include="sasha\js\UpdateMonitor.js" />
-    <Content Include="sasha\ScriptNodes\AddSignalR.txt" />
-    <Content Include="sasha\ScriptNodes\addSignalRCSS.txt" />
-    <Content Include="sasha\ScriptNodes\AttachMonitor.txt" />
-    <Content Include="sasha\ScriptNodes\RequestDictionaryValues.txt" />
-    <Content Include="sasha\ScriptNodes\SlideChatCSS.txt" />
-    <Content Include="sasha\ScriptNodes\SlideChatJavaScript.txt" />
-    <Content Include="sasha\ScriptNodes\UpdateMonitor.txt" />
+    <Content Include="SASHAScriptNodes\AddSignalR.txt" />
+    <Content Include="SASHAScriptNodes\addSignalRCSS.txt" />
+    <Content Include="SASHAScriptNodes\AttachMonitor.txt" />
+    <Content Include="SASHAScriptNodes\RequestDictionaryValues.txt" />
+    <Content Include="SASHAScriptNodes\SlideChatCSS.txt" />
+    <Content Include="SASHAScriptNodes\SlideChatJavaScript.txt" />
+    <Content Include="SASHAScriptNodes\UpdateMonitor.txt" />
     <Content Include="Scripts\jquery-2.2.0.min.map" />
     <None Include="Properties\PublishProfiles\Hawkbane.biz %28winhost%29.pubxml" />
     <None Include="Properties\PublishProfiles\USB Stick.pubxml" />
@@ -147,21 +142,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="monitor\css\countdown.stylesheet.css" />
-    <Content Include="monitor\css\stylesheet.css" />
-    <Content Include="monitor\js\jquery.javascript.js" />
+    <Content Include="css\countdown.stylesheet.css" />
+    <Content Include="css\stylesheet.css" />
+    <Content Include="js\monitor.jquery.js" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
+    <Content Include="js\jquery.countdown.js" />
+    <Content Include="js\jquery.plugin.min.js" />
     <Content Include="index.html" />
-    <Content Include="monitor\js\jquery.countdown.js" />
-    <Content Include="monitor\js\jquery.plugin.min.js" />
-    <Content Include="monitor\index.html" />
-    <Content Include="monitor\js\jquery-2.2.0.min.js" />
-    <Content Include="monitor\js\jquery.signalR-2.2.0.min.js" />
-    <Content Include="sasha\css\stylesheet.css" />
-    <Content Include="sasha\index.html" />
-    <Content Include="sasha\js\addSignalR.jquery.js" />
-    <Content Include="sasha\js\jquery-2.2.0.min.js" />
-    <Content Include="sasha\js\jquery.signalR-2.2.0.min.js" />
+    <Content Include="js\jquery-2.2.0.min.js" />
+    <Content Include="js\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />

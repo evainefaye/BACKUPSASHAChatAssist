@@ -362,7 +362,7 @@ namespace SASHAChatAssist
             }
         }
 
-        public static void getSMPSessionId(string connectionId, string requesterConnectionId, string requesterName)
+        public static void pushChat(string connectionId, string requesterConnectionId, string requesterName)
         {
             using (tsc_tools db = new tsc_tools())
             {

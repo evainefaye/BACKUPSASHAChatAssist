@@ -1,11 +1,101 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Choose Page</title>
-	<meta charset="utf-8" />
+    <title>SASHAChatAssist Monitor</title>
+
+    <!--Script references -->
+    <script src="js/jquery-2.2.0.min.js"></script>
+    <script src="js/jquery.signalR-2.2.0.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="js/jquery.plugin.min.js"></script>
+    <script src="js/jquery.countdown.js"></script>
+    <script src="js/monitor.jquery.js"></script>
+    <!--End Script references -->
+
+    <!-- CSS references -->
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="css/countdown.stylesheet.css" />
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <!-- End CSS references -->
+
 </head>
 <body>
-    <p>This page has no functionality.</p>
-    <p>Please select either the <a href="sasha/" target="_blank"><b>SASHA</b></a> or the <a href="monitor/" target="_blank"><b>Monitor</b></a> page.
+    <div id="wrapper">
+        <div id="userName"></div><input type="button" id="onlineStatus" value="Make Available For Chat" />
+        <p align="center">SELECT A SASHA SESSION TO INTERACT WITH</p>
+        <div id="sessionTabs">
+            <ul>
+                <li><a href="#Inactive">PENDING SESSIONS</a></li>
+                <li><a href="#SashaSessions">SASHA FLOW IN PROGRESS</a></li>
+            </ul>
+            <div id="Inactive" class="CSSTableGenerator table-wrapper">
+                <table id="inactiveSashaSessions">
+                    <thead>
+                        <tr id="tableheader">
+                          <td class="hidden"></td>
+                          <td>USER NAME</td>
+                          <td>ATT ID</td>
+                      </tr>
+                  </thead>
+                  <tbody></tbody>
+              </table>
+         </div>
+         <div id="SashaSessions" class="CSSTableGenerator table-wrapper">
+            <table id="registeredSashaSessions">
+                  <thead>
+                      <tr id="tableheader">
+                          <td class="hidden"></td>
+                          <td>USER NAME</td>
+                          <td>ATT ID</td>
+                          <td>SESSION STARTED</td>
+                          <td>SESSION TIME</td>
+                          <td>FLOW NAME / FLOW STEP</td>
+                          <td>STEP TIME</td>
+                      </tr>
+                  </thead>
+                  <tbody></tbody>
+              </table>
+          </div>
+        </div>
+        <div id="interactionPanel">
+            <div style="display: inline-block;width: 45%;">
+                <p>Last Data Request: <b><span id="lastUpdate">None</span></b></p>
+                <p><button id="requestChat">Request Chat</button>&nbsp;&nbsp;<button id="saveDictionary">Save Dictionary</button>&nbsp;&nbsp;<button id="requestData">Update Data</button></p>
+                <p><label>DICTIONARY VALUES:&nbsp;<textarea rows=5 cols=70 id="fields">AgentName,smpSessionId,wf.lastAgentActivityTime,VenueName,VenueCode,Market,CapCallType,CustomerProduct,FirstName,LastName,RoomNumber,EmailAddress,Phone,DeviceRole,CustomerDeviceOS,MAC,IP,LogNotesForAOTS</textarea></label><br /><span id="errorText"></span></p>
+                <p>You may change the values above at any time to retrieve different data from the data dictionary</p>
+            </div>
+            <div id="chatTabs">
+                <ul>
+                    <li chatId="Monitor"><a href="#Monitor">Helper Chat</a></li>
+                </ul>
+                <div id="Monitor">
+                    <div class="container">
+                        <table class="chat">
+                        <tbody>
+                        </tbody>
+                        </table>
+                    </div>
+                    <input class="message" placeholder="ENTER YOUR MESSAGE HERE" type="text" />
+                </div>
+            </div>
+            <br />
+            <textarea id="announcement" rows=4 cols=60 placeholder="Enter an announcement that will be broadcast to all connected users here"></textarea>
+            <input type="button" id="sendAnnouncement" value="Send Announcement" />
+            <br />
+            <div class="CSSTableGenerator">
+                <table id="resultsTable">
+                    <thead>
+                        <tr>
+                            <td>DICTIONARY ENTRY</td>
+                            <td>VALUE</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <br />
+        </div>
+    </div>
 </body>
 </html>

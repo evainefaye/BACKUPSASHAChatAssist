@@ -168,7 +168,7 @@ namespace SASHAChatAssist
             Database.UpdateSashaSessionRecord(userId, connectionId);
         }
 
-
+        /* Sasha user requests a chat */
         public void SashaInitiateChat(string smpSessionId, string flowName, string stepName)
         {
             /* User Id of agent requesting Chat */
@@ -187,8 +187,7 @@ namespace SASHAChatAssist
 
         }
 
-        /* When a client disconnects attempts to remove its record fro the SashaSessions Database and calls 
-            for an update of sasha sessions on all monitor clients */
+        /* When a client disconnects attempts to remove its record from the SashaSessions Database and calls for an update of sasha sessions on all monitor clients */
         public override Task OnDisconnected(bool stopCalled)
         {
             string connectionId = Context.ConnectionId;
@@ -228,9 +227,10 @@ namespace SASHAChatAssist
         {
             string requesterConnectionId = Context.ConnectionId;
             string requesterName = Clients.Caller.userName;
-            Database.getSMPSessionId(connectionId, requesterConnectionId, requesterName);
+            Database.pushChat(connectionId, requesterConnectionId, requesterName);
         }
 
+        /* Send Notification back to requester of dictionary name saved */
         public void NotifyDictionarySaved(string connectionId, string dictionaryName)
         {
             Clients.All.debug(connectionId);
