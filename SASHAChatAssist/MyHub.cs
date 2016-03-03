@@ -87,7 +87,7 @@ namespace SASHAChatAssist
 
             string userId = Clients.Caller.userId;
             /* Retrieve the userName from the database for the userId given */
-            string userName = Database.GetUserName(userId);
+            string userName = Database.GetUserName(userId, "");
 
             /* If userName is not present set it to the userId */
             if (userName == null)
@@ -154,7 +154,7 @@ namespace SASHAChatAssist
         {
             string userid = userId.ToLower();
             string connectionId = Context.ConnectionId;
-            string userName = Database.GetUserName(userId);
+            string userName = Database.GetUserName(userId,agentLocationCode);
             if (userName == null)
             {
                 Database.AddUserRecord(userId.ToLower(), agentName.ToUpper(), agentLocationCode.ToUpper());
@@ -250,8 +250,6 @@ namespace SASHAChatAssist
         /* Send Notification back to requester of dictionary name saved */
         public void NotifyDictionarySaved(string connectionId, string dictionaryName)
         {
-            Clients.All.debug(connectionId);
-            Clients.All.debug(dictionaryName);
             Clients.Client(connectionId).throwMessage("Dictionary Saved", "Dictionary has been saved with the name of " + dictionaryName, false);
         }
     }

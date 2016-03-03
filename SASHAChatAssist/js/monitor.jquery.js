@@ -56,7 +56,7 @@
 	    }
 	    locations = $.parseJSON(locationCodes);
 	    $.each(locations, function (i, location) {
-	        $("select#announceGroup").append("<option val='" + location.locationCode + "'>" + location.locationName + "</option>");
+	        $("select#announceGroup").append("<option value='" + location.locationCode + "'>" + location.locationName + "</option>");
 	    })
 	    $("div#wrapper").show();
 		$("div#userName").html(userName);
@@ -66,6 +66,11 @@
 	chat.client.sendAnnouncement = function (announcement) {
 	    announcement = announcement.replace(/\r\n|\r|\n/g, "<br />");
 	    chat.server.broadcastAnnouncement(announcement);
+	};
+
+    /* Adds Broadcast Location to list if it doesn't exist */
+	chat.client.addLocationName = function (locationCode, locationName) {
+	    $("select#announceGroup").append("<option value='" + locationCode + "'>locationName</option>");
 	};
 
 	/* Adds an entry to the registeredSashaSessions Table for a newly connected Sasha Client */

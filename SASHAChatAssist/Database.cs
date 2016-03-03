@@ -44,7 +44,7 @@ namespace SASHAChatAssist
         }
 
         /* Takes the input of userId and searches in the database table [users] This function will retrieve the userName from the database table [users] */
-        public static string GetUserName(string userId)
+        public static string GetUserName(string userId, string agentLocationCode)
         {
             using (tsc_tools db = new tsc_tools())
             {
@@ -52,6 +52,24 @@ namespace SASHAChatAssist
                 var userRecord = db.users.Where(u => u.userId == userId.ToLower()).SingleOrDefault();
                 if (userRecord != null)
                 {
+                    if (agentLocationCode != "" && (userRecord.locationCode == "" || userRecord.locationCode == null))
+                    {
+                        userRecord.locationCode = agentLocationCode.ToUpper();
+                        db.Entry(userRecord).CurrentValues.SetValues(userRecord);
+                        db.SaveChanges();
+                        locationLookup locationLookup = new locationLookup();
+                        var locationLookupRecord = db.locationLookups.Where(l => l.locationCode == agentLocationCode.ToUpper()).SingleOrDefault();
+                        if (locationLookupRecord == null)
+                        {
+                            locationLookup.locationCode = agentLocationCode.ToUpper();
+                            string locationName = "Building: " + agentLocationCode;
+                            locationLookup.locationName = locationName;
+                            db.locationLookups.Add(locationLookup);
+                            db.SaveChanges();
+                            var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
+                            context.Clients.Group(groupNames.Monitor).addLocationName(agentLocationCode, locationName);
+                        }
+                    }
                     return userRecord.userName.ToUpper();
                 }
                 else
