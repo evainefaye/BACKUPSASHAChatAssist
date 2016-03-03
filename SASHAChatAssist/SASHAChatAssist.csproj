@@ -116,6 +116,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="js\jquery-2.2.1.min.js" />
     <Content Include="packages.config" />
     <Content Include="SASHAScriptNodes\AddSignalR.txt" />
     <Content Include="SASHAScriptNodes\addSignalRCSS.txt" />
@@ -124,16 +125,18 @@
     <Content Include="SASHAScriptNodes\SlideChatCSS.txt" />
     <Content Include="SASHAScriptNodes\SlideChatJavaScript.txt" />
     <Content Include="SASHAScriptNodes\UpdateMonitor.txt" />
-    <Content Include="Scripts\jquery-2.2.0.min.map" />
     <None Include="Properties\PublishProfiles\Hawkbane.biz %28winhost%29.pubxml" />
     <None Include="Properties\PublishProfiles\USB Stick.pubxml" />
     <EntityDeploy Include="tsc_tools.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>tsc_tools.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Scripts\jquery-2.2.1.js" />
+    <Content Include="Scripts\jquery-2.2.1.min.js" />
     <Content Include="tsc_tools.edmx.diagram">
       <DependentUpon>tsc_tools.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\jquery-2.2.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -145,14 +148,10 @@
     <Content Include="css\countdown.stylesheet.css" />
     <Content Include="css\stylesheet.css" />
     <Content Include="js\monitor.jquery.js" />
-    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="js\jquery.countdown.js" />
     <Content Include="js\jquery.plugin.min.js" />
     <Content Include="index.html" />
-    <Content Include="js\jquery-2.2.0.min.js" />
     <Content Include="js\jquery.signalR-2.2.0.min.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="tsc_tools.Context.tt">
