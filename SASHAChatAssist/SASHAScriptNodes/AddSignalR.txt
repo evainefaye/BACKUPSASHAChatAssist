@@ -64,9 +64,17 @@
 
 					/* Enables the Opt Out Button */
 					chat.client.enableOptOut = function(userName) {
-						alert("Opt Out Approved By  " + userName);
-						OptOut = userName;
-						$("#wrapUp_button").click();
+						$("<div class=OptOutBegun title=\'Opt Out Initiated\'>Opt Out has been initiated by " + userName + "</div>").dialog({
+							closeOnEscape: true,
+							width: $(window).width()-200,
+						});
+						setTimeOut(function() {
+							if ($(".OptOutBegun").dialog("isOpen")) {
+								$(".OptOutBegun").dialog("destroy");
+							}
+						},5000);
+						/* You can optionally store information here in a JavaScript variable that you can call later */
+						wf.doEvent("wrapup.uverse");
 					};
 
 					/* Will generate an error message dialog box with the given title and message. Optionally Disconnects from the server. */
