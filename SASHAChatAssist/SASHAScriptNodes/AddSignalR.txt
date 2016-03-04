@@ -68,7 +68,7 @@
 							return;
 						}
 						console.log("creating dialog");
-						$("<div class=OptOutBegun title=OptOut>Opt Out has been initiated by " + userName + "</div>").dialog({
+						$("<div class=OptOutBegun title=>Opt Out has been initiated by " + userName + "</div>").dialog({
 							closeOnEscape: true,
 							width: $(window).width()-200,
 						});
