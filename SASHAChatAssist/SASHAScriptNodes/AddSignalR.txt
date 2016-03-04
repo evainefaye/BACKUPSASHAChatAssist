@@ -73,7 +73,6 @@
 								$(".OptOutBegun").dialog("destroy");
 							}
 						},5000);
-						/* You can optionally store information here in a JavaScript variable that you can call later */
 						wf.doEvent("wrapup.uverse");
 					};
 
