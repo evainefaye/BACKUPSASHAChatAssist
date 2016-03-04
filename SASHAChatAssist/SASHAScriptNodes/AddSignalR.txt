@@ -64,19 +64,21 @@
 
 					/* Enables the Opt Out Button */
 					chat.client.enableOptOut = function(userName) {
-						console.log("called");
 						if ($("#wrapUp_button").length == 1) {
 							return;
 						}
-						$("<div class=OptOutBegun title=\'Opt Out Initiated\'>Opt Out has been initiated by " + userName + "</div>").dialog({
+						console.log("creating dialog");
+						$("<div class=OptOutBegun title=OptOut>Opt Out has been initiated by " + userName + "</div>").dialog({
 							closeOnEscape: true,
 							width: $(window).width()-200,
 						});
+						console.log("creating timeout");
 						setTimeOut(function() {
 							if ($(".OptOutBegun").dialog("isOpen")) {
 								$(".OptOutBegun").dialog("destroy");
 							}
 						},5000);
+						console.log("doing wrapup");
 						wf.doEvent("wrapup.uverse");
 					};
 
