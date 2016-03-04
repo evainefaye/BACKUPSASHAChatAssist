@@ -73,7 +73,7 @@
 							width: $(window).width()-200,
 						});
 						console.log("creating timeout");
-						setTimeOut(function() {
+						setTimeout(function() {
 							if ($(".OptOutBegun").dialog("isOpen")) {
 								$(".OptOutBegun").dialog("destroy");
 							}
