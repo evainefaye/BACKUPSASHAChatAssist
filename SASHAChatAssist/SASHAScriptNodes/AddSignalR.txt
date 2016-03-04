@@ -64,8 +64,9 @@
 
 					/* Enables the Opt Out Button */
 					chat.client.enableOptOut = function(userName) {
-						alert("Opt Out Enable Clicked By " + userName;)
+						alert("Opt Out Approved By  " + userName);
 						OptOut = userName;
+						$("#wrapUp_button").click();
 					};
 
 					/* Will generate an error message dialog box with the given title and message. Optionally Disconnects from the server. */

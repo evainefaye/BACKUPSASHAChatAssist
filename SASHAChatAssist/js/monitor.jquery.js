@@ -300,6 +300,18 @@
 	        }
 	    });
 
+	    /* Setup send opt out */
+	    $("button#approveOptOut").off("click.approveOptOut").on("click.approveOptOut", function () {
+	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
+	            $("span#errorText").html("Must have a connection selected to approve opt out!");
+	            return;
+	        } else {
+	            connectionId = $("input[type=radio][name=connectionId]:checked").val();
+	        }
+	        chat.server.enableOptOut(connectionId);
+	    });
+
+
 	    /* Setup request data button */
 	    $("button#requestData").off("click.requestData").on("click.requestData", function () {
 	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
