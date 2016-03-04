@@ -1,0 +1,7 @@
+﻿#{'
+	<script>
+		$(document).ready(function() {
+			$("wrapUp_button").remove();
+		});
+	</script>
+'}
