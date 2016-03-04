@@ -204,6 +204,12 @@ namespace SASHAChatAssist
 
         }
 
+        /* Enables Opt Out Option on SASHA Client */
+        public void EnableOptOut(string connectionId)
+        {
+            Clients.Client(connectionId).enableOptOut(Clients.Caller.userName);
+        }
+
         /* When a client disconnects attempts to remove its record from the SashaSessions Database and calls for an update of sasha sessions on all monitor clients */
         public override Task OnDisconnected(bool stopCalled)
         {

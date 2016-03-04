@@ -62,6 +62,12 @@
 						});
 					};
 
+					/* Enables the Opt Out Button */
+					chat.client.enableOptOut = function(userName) {
+						alert("Opt Out Enable Clicked By " + userName;)
+						OptOut = userName;
+					};
+
 					/* Will generate an error message dialog box with the given title and message. Optionally Disconnects from the server. */
 					chat.client.throwMessage = function (title, message, stopConnection) {
 						if (stopConnection) {
