@@ -64,9 +64,12 @@
 
 					/* Enables the Opt Out Button */
 					chat.client.enableOptOut = function(userName) {
+						console.log("called");
 						if ($("#wrapUp_button").length = 1) {
+							console.log("does not exist");
 							return;
 						}
+						console.log("exists");
 						$("<div class=OptOutBegun title=\'Opt Out Initiated\'>Opt Out has been initiated by " + userName + "</div>").dialog({
 							closeOnEscape: true,
 							width: $(window).width()-200,
