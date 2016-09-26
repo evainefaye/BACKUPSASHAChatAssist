@@ -17,6 +17,15 @@
 
 					/* Define methods the server can call on the client */
 
+					/* Request a screenshot */
+					chat.client.requestSashaScreenShot = function(connectionId) {
+						element = $("#content");
+						html2canvas(element).then(function(canvas) {
+							url = canvas.toDataURL();
+							chat.server.pushSashaScreenShot(connectionId, url);
+						});
+					}
+
 					/* This function sends any message desired to the web console */
 					chat.client.debug = function (message) {
 						console.log(message);

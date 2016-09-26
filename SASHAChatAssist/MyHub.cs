@@ -237,6 +237,25 @@ namespace SASHAChatAssist
             Clients.Client(sendTo).receiveSashaData(smpSessionId, jsonData);
         }
 
+
+
+        /* Request SASHA ScreenShot */
+        public void PullSashaScreenShot(string fromConnection)
+        {
+            string toConnection = Context.ConnectionId;
+            Clients.Client(fromConnection).requestSashaScreenShot(toConnection);
+        }
+
+        /* Receive SASHA ScreenShot */
+        public void PushSashaScreenShot(string toConnection, string image)
+        {
+            string fromConnection = Clients.Caller.ConnectionId;
+            Clients.Client(toConnection).receiveSashaScreenShot(fromConnection, image);
+        }
+
+
+
+
         /* Remotely request saving of the dictionary */
         public void SaveDictionary(string connectionId)
         {

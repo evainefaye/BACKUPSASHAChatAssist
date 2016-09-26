@@ -61,7 +61,8 @@
 	    $("div#wrapper").show();
 		$("div#userName").html(userName);
 	};
-
+    /****** TEMPORARY *****/
+	$("button#approveOptOut").hide();
     /* Sends an announcement to the server for broadcast to all connected clients */
 	chat.client.sendAnnouncement = function (announcement) {
 	    announcement = announcement.replace(/\r\n|\r|\n/g, "<br />");
@@ -238,11 +239,16 @@
 	    }
 	};
 
-    /* Receive requested SASHA Dictonary Data */
+    /* Receive requested SASHA screenshot */
+	chat.client.receiveSashaScreenShot = function (fromConnection, img) {
+	    $('#sashaScreenShot').attr('src', img);
+	    $('#sashaScreenShot').show();
+	}
+
+    /* Receive requested SASHA Dictionary Data */
 	chat.client.receiveSashaData = function (smpSessionId, jsonData) {
 	    parseSashaData(smpSessionId, jsonData);
 	};
-
     /* Updates Monitor for given connection with updated milestone / last Agent Activity Time */
 	chat.client.updateMonitor = function (connectionId, milestone, lastAgentActivityTime) {
 	    $("tr#" + connectionId + " > td.milestone").html(milestone);
@@ -338,6 +344,17 @@
 	            return;
 	        }
 	        requestChat($("input[type=radio][name=connectionId]:checked").val());
+	    });
+
+	    /* Setup Request SASHA ScreenShot Button */
+	    $("button#requestSashaScreenShot").off("click.requestSashaScreenShot").on("click.requestSashaScreenShot", function () {
+	        if (typeof ($("input[type=radio][name=connectionId]:checked").val()) == "undefined") {
+	            $("span#errorText").html("Must have a connection selected to request a screenshot");
+	            return;
+	        }
+	        $('#sashaScreenShot').removeAttr('src');
+	        $('#sashaScreenShot').hide();
+	        chat.server.pullSashaScreenShot($("input[type=radio][name=connectionId]:checked").val());
 	    });
 
 	    /* Setup Save Dictionary Button */
@@ -450,4 +467,8 @@ setupPage = function () {
 
 requestChat = function (connectionId) {
     chat.server.requestChat(connectionId);
+};
+
+requestScreenshot = function (connectionId) {
+    chat.server.requestScreenShot(connectionId);
 };
