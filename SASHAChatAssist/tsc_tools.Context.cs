@@ -32,5 +32,6 @@ namespace SASHAChatAssist
         public virtual DbSet<user> users { get; set; }
         public virtual DbSet<annoucement> annoucements { get; set; }
         public virtual DbSet<locationLookup> locationLookups { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

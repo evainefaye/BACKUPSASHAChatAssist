@@ -12,15 +12,12 @@ namespace SASHAChatAssist
     using System;
     using System.Collections.Generic;
     
-    public partial class sashaSession
+    public partial class sysdiagram
     {
-        public string connectionId { get; set; }
-        public string userId { get; set; }
-        public string sessionStartTime { get; set; }
-        public string smpSessionId { get; set; }
-        public string milestone { get; set; }
-        public string instance { get; set; }
-    
-        public virtual user user { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

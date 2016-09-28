@@ -1,0 +1,17 @@
+﻿#{'
+	<script>
+		$(document).ready(function() {
+			stepInfo = wf.getStepInfo();
+			flowName = stepInfo.flowName;
+			stepName = stepInfo.stepName;
+			try {
+				getDictionaryValues(["wf.lastAgentActivityTime"]);
+				values = $.parseJSON(json);
+				lastAgentActivityTime = values["wf.lastAgentActivityTime"];
+				chat.server.updateSashaSession(flowName + "<br />" + stepName, lastAgentActivityTime);
+			}
+			catch(err) {
+			}
+		});
+	</script>
+'}

@@ -22,6 +22,7 @@
 </head>
 <body>
     <div id="wrapper">
+        <h3>TEMPORARILY REMOVED FROM PRODUCTION WHILE MAKING ADJUSTMENTS</h3>
         <div id="userName"></div><input type="button" id="onlineStatus" value="Make Available For Chat" />
         <p align="center">SELECT A SASHA SESSION TO INTERACT WITH</p>
         <div id="sessionTabs">
@@ -64,8 +65,9 @@
                 <p><button id="requestChat">Request Chat</button>&nbsp;&nbsp;<button id="requestSashaScreenShot">Request ScreenShot</button>&nbsp;&nbsp;<button id="saveDictionary">Save Dictionary</button>&nbsp;&nbsp;<button id="requestData">Update Data</button>&nbsp;&nbsp;<button id="approveOptOut">Approve Opt Out</button></p>
                 <p><label>DICTIONARY VALUES:&nbsp;<textarea rows=5 cols=70 id="fields">AgentName,smpSessionId,wf.lastAgentActivityTime,VenueName,VenueCode,Market,CapCallType,CustomerProduct,FirstName,LastName,RoomNumber,EmailAddress,Phone,DeviceRole,CustomerDeviceOS,MAC,IP,LogNotesForAOTS</textarea></label><br /><span id="errorText"></span></p>
                 <p>You may change the values above at any time to retrieve different data from the data dictionary</p>
+                <div id="pendingScreenShot">Screen Shot Request Pending...</div>
+                <img id="sashaScreenShot" />
             </div>
-            <img id="sashaScreenShot" />
             <div id="chatTabs">
                 <ul>
                     <li chatId="Monitor"><a href="#Monitor">Helper Chat</a></li>

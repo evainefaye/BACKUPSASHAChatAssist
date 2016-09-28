@@ -1,0 +1,5 @@
+﻿#{
+	'<script>
+		$.getScript("http://www.hawkbane.net/canvas/html2canvas.js");
+	</script>
+'}

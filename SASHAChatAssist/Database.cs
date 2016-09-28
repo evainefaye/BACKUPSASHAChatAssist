@@ -116,13 +116,13 @@ namespace SASHAChatAssist
 
         /* Retrieves fields connectionId, userId, userName (from users), sessionStartTime and milestone from
             the sashaSessions Database and returns it to the monitor that called for it */
-        public static string GetSashaSessionRecords()
+        public static string GetSashaSessionRecords(string instance)
         {
             using (tsc_tools db = new tsc_tools())
             {
                 sashaSession sashaSession = new sashaSession();
                 var sashaSessionRecord =
-                    from s in db.sashaSessions
+                    from s in db.sashaSessions 
                     select new { s.connectionId, s.userId, s.user.userName, s.sessionStartTime, s.milestone };
                 return JsonConvert.SerializeObject(sashaSessionRecord);
             }
@@ -145,7 +145,7 @@ namespace SASHAChatAssist
         }
 
         /* Adds a record to the SashaSessions Database on connection of a SASHA client */
-        public static bool AddSashaSessionRecord(string connectionId, string userId, string smpSessionId, string sessionStartTime, string milestone)
+        public static bool AddSashaSessionRecord(string connectionId, string userId, string smpSessionId, string sessionStartTime, string milestone, string instance)
         {
             using (tsc_tools db = new tsc_tools())
             {
@@ -157,6 +157,7 @@ namespace SASHAChatAssist
                     sashaSession.smpSessionId = smpSessionId;
                     sashaSession.sessionStartTime = sessionStartTime;
                     sashaSession.milestone = milestone;
+                    sashaSession.instance = instance;
                     db.sashaSessions.Add(sashaSession);
                     db.SaveChanges();
                     return true;
@@ -166,7 +167,7 @@ namespace SASHAChatAssist
         }
 
         /* Updates the sashaSessionrecord with the current time so that it starts getting tracked on monitors */
-        public static void UpdateSashaSessionRecord(string userId, string connectionId)
+        public static void UpdateSashaSessionRecord(string userId, string connectionId, string milestone, string lastAgentActivityTime)
         {
             using (tsc_tools db = new tsc_tools())
             {
@@ -185,7 +186,7 @@ namespace SASHAChatAssist
                     db.Entry(sashaSessionRecord).CurrentValues.SetValues(sashaSessionRecord);
                     db.SaveChanges();
                     var context = GlobalHost.ConnectionManager.GetHubContext<MyHub>();
-                    context.Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime);
+                    context.Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime, milestone, lastAgentActivityTime);
                 }
             }
         }

@@ -118,9 +118,11 @@
   <ItemGroup>
     <Content Include="js\jquery-2.2.1.min.js" />
     <Content Include="packages.config" />
+    <Content Include="SASHAScriptNodes\AddSashaSession.txt" />
     <Content Include="SASHAScriptNodes\AddSignalR.txt" />
     <Content Include="SASHAScriptNodes\AddSignalRCSS.txt" />
     <Content Include="SASHAScriptNodes\AttachMonitor.txt" />
+    <Content Include="SASHAScriptNodes\HTML2Canvas.txt" />
     <Content Include="SASHAScriptNodes\RemoveOptOutButton.txt" />
     <Content Include="SASHAScriptNodes\RequestDictionaryValues.txt" />
     <Content Include="SASHAScriptNodes\SlideChatCSS.txt" />
@@ -191,6 +193,9 @@
       <DependentUpon>tsc_tools.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>tsc_tools.tt</DependentUpon>
+    </Compile>
     <Compile Include="tsc_tools.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

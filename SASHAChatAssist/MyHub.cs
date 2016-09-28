@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace SASHAChatAssist
 {
@@ -128,8 +129,20 @@ namespace SASHAChatAssist
             /* Update the userName div on the main page with the recovered userName and send permissions */
             Clients.Caller.updateDisplay(userName, chatHelper, locationCodes);
 
+            /* Get QueryString of URL */
+            var url = HttpContext.Current.Request.Url.Query;
+            var query = HttpUtility.ParseQueryString(url);
+            var instance = query.Get("instance");
+            if (instance.ToLower() == "staging")
+            {
+                instance = "Staging";
+            } else
+            {
+                instance = "Prod";
+            }
+
             /* Retrieve list of Sasha Sessions from the sashaSessions and push them to the newly connected monitor */
-            string sashaSessionRecords = Database.GetSashaSessionRecords();
+            string sashaSessionRecords = Database.GetSashaSessionRecords(instance);
             Clients.Caller.receiveSashaSessionRecords(sashaSessionRecords);
 
         }
@@ -150,7 +163,7 @@ namespace SASHAChatAssist
         /* ***** SASHA SPECIFIC FUNCTIONS ***** */
 
         /* Add Initial Record to SASHA Sessions */
-        public void RegisterSashaSession(string userId, string agentName, string smpSessionId, string agentLocationCode)
+        public void RegisterSashaSession(string userId, string agentName, string smpSessionId, string agentLocationCode, string instance)
         {
             string userid = userId.ToLower();
             string connectionId = Context.ConnectionId;
@@ -168,21 +181,22 @@ namespace SASHAChatAssist
             Clients.Caller.smpSessionId = smpSessionId;
             Groups.Add(connectionId, smpSessionId);
             string sessionStartTime = "";
-            if (Database.AddSashaSessionRecord(connectionId, userId, smpSessionId, sessionStartTime, ""))
+            if (Database.AddSashaSessionRecord(connectionId, userId, smpSessionId, sessionStartTime, "", instance))
             {
                 Groups.Add(connectionId, groupNames.Sasha);
                 Groups.Add(connectionId, smpSessionId);
+                Groups.Add(connectionId, instance);
                 Clients.Group(groupNames.Monitor).addSashaSession(connectionId, userId, userName, sessionStartTime, "");
                 CheckAnnouncements(userId);
             }
         }
 
         /* Sets the Session Start Time to a value indicating that you have begun the actual SASHA flow and should be tracked */
-        public void UpdateSashaSession()
+        public void UpdateSashaSession(string milestone, string lastAgentActivityTime)
         {
             string userId = Clients.Caller.userId;
             string connectionId = Context.ConnectionId;
-            Database.UpdateSashaSessionRecord(userId, connectionId);
+            Database.UpdateSashaSessionRecord(userId, connectionId, milestone, lastAgentActivityTime);
         }
 
         /* Sasha user requests a chat */

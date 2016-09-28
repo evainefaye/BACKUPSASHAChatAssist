@@ -10,7 +10,7 @@
 
 		/* Start the connection if not started */
 		if (typeof(window.hubStart) === "undefined") {
-			$.getScript("http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js", function () {
+			$.getScript("http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.1.min.js", function () {
 				/* URL of the HUB that is being used, this will be changed for production */
 				$.getScript("http://hawkbane.biz/signalr/hubs", function() {
 					chat = $.connection.myHub;
@@ -159,7 +159,7 @@
 					smpSessionId = "'}#{smpSessionId}#{'";
 					smpSessionId=smpSessionId.replace(/:/g,"");
 					smpSessionId=smpSessionId.replace(/\\//g,"");
-					chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId,"'}#{AgentLocationCode}#{'");
+					chat.server.registerSashaSession("'}#{userName}#{'","'}#{AgentName}#{'",smpSessionId,"'}#{AgentLocationCode}#{'","'}#{environmentProperties.RunLocation}#{'");
 					CRToSend();
 				});
 			}
@@ -180,18 +180,20 @@
 		};
 
 		CRToSend = function() {
-        $(".message").off("keyup.CRToSend").on("keyup.CRToSend",function(event) {
-            if (event.keyCode == 13) {
-                message = $(this).val().trim();
-                if (message != "") {
-					chatId = "'}#{smpSessionId}#{'";
-					chatId=chatId.replace(/:/g,"");
-					chatId=chatId.replace(/\\//g,"");                
-                    chat.server.broadcastMessage(chatId, message);
-                    $(this).val("").focus();
-                }
-            }
-        });
-    };
+	        $(".message").off("keyup.CRToSend").on("keyup.CRToSend",function(event) {
+		        if (event.keyCode == 13) {
+					message = $(this).val().trim();
+					if (message != "") {
+						chatId = "'}#{smpSessionId}#{'";
+						chatId=chatId.replace(/:/g,"");
+						chatId=chatId.replace(/\\//g,"");                
+						chat.server.broadcastMessage(chatId, message);
+						$(this).val("").focus();
+					}
+					event.preventDefault();
+					event.stopPropagation();
+				}
+			});
+		};
 	</script>
 '}
