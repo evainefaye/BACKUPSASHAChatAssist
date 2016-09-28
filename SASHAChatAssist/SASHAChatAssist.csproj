@@ -118,7 +118,7 @@
   <ItemGroup>
     <Content Include="js\jquery-2.2.1.min.js" />
     <Content Include="packages.config" />
-    <Content Include="SASHAScriptNodes\AddSashaSession.txt" />
+    <Content Include="SASHAScriptNodes\StartSASHASession.txt" />
     <Content Include="SASHAScriptNodes\AddSignalR.txt" />
     <Content Include="SASHAScriptNodes\AddSignalRCSS.txt" />
     <Content Include="SASHAScriptNodes\AttachMonitor.txt" />
